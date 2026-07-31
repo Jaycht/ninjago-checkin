@@ -32,10 +32,9 @@
     border-right:1px solid var(--line);padding:14px 10px;position:sticky;top:0;height:100vh;
     display:flex;flex-direction:column;gap:4px;z-index:40;
   }
-  .brand{display:flex;align-items:center;gap:8px;padding:6px 8px 14px;font-weight:800;font-size:15px}
-  .brand .logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:20px;
-    background:linear-gradient(135deg,var(--gold),#ff8a3d);box-shadow:var(--shadow)}
-  .brand small{display:block;font-weight:500;color:var(--sub);font-size:10px;margin-top:1px}
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
+  .who .sub{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
   .nav-btn{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:var(--sub);
     font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:.15s;user-select:none}
   .nav-btn .ic{width:24px;text-align:center;font-size:17px}
@@ -44,26 +43,38 @@
   .nav-spacer{flex:1}
   .modebadge{margin-top:8px;padding:10px;border-radius:12px;background:#0c1530;border:1px solid var(--line);font-size:12px;color:var(--sub)}
   .modebadge b{color:var(--gold)}
+  /* nav groups */
+  .nav-grp{margin:8px 0 2px}
+  .nav-grp-label{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--sub);opacity:.7;padding:0 12px 4px;text-transform:none}
+  /* profile modal */
+  .pf-av-row{display:flex;align-items:center;gap:12px}
+  .pf-av-prev{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:30px;overflow:hidden;
+    background:radial-gradient(circle at 30% 30%,var(--gold),#0c1530);border:2px solid var(--line);flex:0 0 64px}
+  .pf-av-prev img{width:100%;height:100%;object-fit:cover}
+  .pf-av-actions{display:flex;flex-direction:column;gap:8px}
+  .pf-av-actions .btn{cursor:pointer}
   /* Main */
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
-  .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:10px 14px;
-    background:rgba(14,23,51,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  .hamb{display:none;font-size:22px;background:none;border:none;color:var(--txt);cursor:pointer}
-  .hud{display:flex;align-items:center;gap:12px;flex:1;min-width:0;flex-wrap:wrap}
+  .topwrap{position:sticky;top:0;z-index:30}
+  .topbar{display:flex;align-items:center;gap:10px;padding:9px 14px;
+    background:linear-gradient(180deg,rgba(16,28,64,.96),rgba(14,23,51,.9));border-bottom:1px solid var(--line)}
+  .app-title{font-weight:900;font-size:clamp(14px,4.2vw,17px);color:#fff;display:flex;align-items:center;gap:8px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .app-logo{font-size:20px;filter:drop-shadow(0 0 6px rgba(255,210,63,.6))}
+  .hamb{display:none;font-size:22px;background:none;border:none;color:var(--txt);cursor:pointer;flex:0 0 auto}
   .avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;position:relative;flex:0 0 46px;
     box-shadow:0 0 0 3px rgba(255,255,255,.12),var(--shadow);animation:spin 9s linear infinite}
+  .avatar.static{animation:none}
   @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-  .avatar .badge{position:absolute;right:-4px;bottom:-4px;font-size:15px;background:#0c1530;border-radius:50%;padding:1px 2px}
-  .who{min-width:0}
-  .who .nm{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .who .rk{font-size:11px;color:var(--gold);font-weight:700}
-  .stats{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
-  .stat{display:flex;align-items:center;gap:5px;background:#0f1b3e;border:1px solid var(--line);border-radius:999px;
-    padding:5px 11px;font-size:13px;font-weight:700;white-space:nowrap}
+  .avatar .badge{position:absolute;right:-4px;bottom:-4px;font-size:15px;background:#0c1530;border-radius:50%;padding:1px 2px;z-index:2}
+  .statbar{background:rgba(14,23,51,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:8px 14px}
+  .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;max-width:980px;margin:0 auto}
+  .stat{display:flex;align-items:center;gap:5px;background:#0f1b3e;border:1px solid var(--line);border-radius:10px;
+    padding:6px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+  .stat b{margin-left:auto;font-size:14px;font-variant-numeric:tabular-nums}
   .stat .lbl{color:var(--sub);font-weight:600;font-size:11px}
   .stat.energy{color:var(--gold)} .stat.dark{color:#c08bff} .stat.streak{color:#ff7a3d} .stat.shield{color:#7fd1ff}
   .modebtn{background:linear-gradient(135deg,var(--gold),#ff9b3d);color:#241a00;border:none;border-radius:12px;
-    padding:9px 14px;font-weight:800;font-size:13px;cursor:pointer;box-shadow:var(--shadow)}
+    padding:9px 14px;font-weight:800;font-size:13px;cursor:pointer;box-shadow:var(--shadow);flex:0 0 auto}
   .modebtn.parent{background:linear-gradient(135deg,#7c8cff,#5b6cff);color:#fff}
   .wrap{padding:16px 16px 40px;max-width:980px;margin:0 auto;width:100%}
   .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--r);
@@ -160,11 +171,9 @@
   .empty{padding:22px;text-align:center;color:var(--sub);font-size:13px}
   /* mobile */
   @media(max-width:820px){
-    .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow)}
+    .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);z-index:40}
     .sidebar.open{transform:translateX(0)}
     .hamb{display:block}
-    .stats{width:100%;margin-left:0;justify-content:flex-start}
-    .who{display:none}
     .wrap{padding:14px 12px 40px}
     .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
   }
@@ -180,9 +189,13 @@
     .anode .att{font-size:13.5px}
     .anode .arw{font-size:11px}
     .qgrid{grid-template-columns:repeat(auto-fit,minmax(46%,1fr))}
-    .stat{padding:4px 9px;font-size:12px}
+    .statbar{padding:7px 10px}
+    .statgrid{gap:5px 8px}
+    .stat{padding:5px 8px;font-size:12px}
+    .stat b{font-size:13px}
     .elem-opt .e img{width:74px;height:74px}
     .topbar{padding:8px 10px;gap:8px}
+    .modebtn{padding:8px 11px;font-size:12px}
     .btn{padding:11px 12px;font-size:13.5px}
     .ninja-hero{padding:14px 10px 12px}
     .ninja-hero h1{font-size:clamp(19px,5.6vw,24px);line-height:1.2}
@@ -347,21 +360,23 @@
 <div id="bgfx" class="bgfx"></div>
 <div class="layout">
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="logo" id="brandlogo">🥷</div><div>幻影忍者<br><small>自主学习打卡台</small></div></div>
+    <div class="brand">
+      <div class="avatar" id="avatar">🥷<span class="badge" id="avatarBadge">🐉</span></div>
+      <div class="who"><div class="nm" id="whoName">忍者学员</div><div class="rk" id="whoRank">忍者学徒</div><div class="sub" id="whoSub"></div></div>
+    </div>
     <div id="nav"></div>
     <div class="nav-spacer"></div>
     <div class="modebadge" id="modebadge"></div>
   </aside>
   <div class="scrim" id="scrim"></div>
   <div class="main">
-    <div class="topbar">
-      <button class="hamb" id="hamb">☰</button>
-      <div class="hud">
-        <div class="avatar" id="avatar">🥷<span class="badge" id="avatarBadge">🐉</span></div>
-        <div class="who"><div class="nm" id="whoName">忍者学员</div><div class="rk" id="whoRank">忍者学徒</div></div>
-        <div class="stats" id="stats"></div>
+    <div class="topwrap">
+      <div class="topbar">
+        <button class="hamb" id="hamb">☰</button>
+        <div class="app-title"><span class="app-logo">🥷</span> 乐高幻影忍者学习大冒险</div>
+        <button class="modebtn" id="modebtn">家长</button>
       </div>
-      <button class="modebtn" id="modebtn">家长</button>
+      <div class="statbar"><div class="statgrid" id="statgrid"></div></div>
     </div>
     <div class="wrap" id="app"></div>
   </div>
@@ -422,7 +437,7 @@ const MEDAL_DEFS={
   allsix:{name:'全术精通',emoji:'🌀',rarity:'legendary',desc:'六术全部达到Lv3+'},
   recite:{name:'背诵大师',emoji:'📜',rarity:'epic',desc:'背完老师布置的22关'},
   awaken:{name:'奥义觉醒',emoji:'🌟',rarity:'rare',desc:'首次完成六术全修'},
-  math4:{name:'数学先锋',emoji:'➗',rarity:'rare',desc:'完成四上数学8单元预习'},
+  math4:{name:'数学先锋',emoji:'➗',rarity:'rare',desc:'完成四上数学全部单元预习'},
   englay:{name:'英语达人',emoji:'🔤',rarity:'rare',desc:'完成英语分层作业'}
 };
 
@@ -695,175 +710,7 @@ const CONTENT={
           ]}
         ]}
       ]},
-    数学:{grades:[
-      {grade:'三年级下册',term:'复习',units:[
-        {u:'一 热闹的民俗节——对称',lessons:[
-          {t:'对称与轴对称图形',k:'概念',text:'对折后两边能完全重合的图形是轴对称图形；折痕所在的直线叫对称轴。',qs:[
-            {t:'选择',q:'下面哪个是轴对称图形？',o:['正方形','平行四边形（一般）','任意三角形'],a:0},
-            {t:'填空',q:'轴对称图形对折的折痕所在的直线叫（ ）。',a:'对称轴',hint:'对称'},
-            {t:'选择',q:'数字“8”有两条对称轴，它属于？',o:['轴对称图形','不对称图形','三角形'],a:0}
-          ]}
-        ]},
-        {u:'二 大数知多少——万以上数的认识',lessons:[
-          {t:'万以上数的读与写',k:'概念',text:'从个位起每四位一级：个级、万级、亿级。读数从高位读起，每级末尾的0不读。',qs:[
-            {t:'填空',q:'10个一万是（ ）。',a:'十万',hint:'万→十万'},
-            {t:'填空',q:'30500000 读作：三千零（ ）万。',a:'五十',hint:'3050 0000'},
-            {t:'选择',q:'下面哪个数约等于 3 亿？',o:['298000000','350000000','305000000'],a:0}
-          ]}
-        ]},
-        {u:'三 走进天文馆——年、月、日',lessons:[
-          {t:'年、月、日与24时计时',k:'概念',text:'大月31天（1,3,5,7,8,10,12），小月30天（4,6,9,11），平年2月28天、闰年2月29天。',qs:[
-            {t:'选择',q:'下面哪个月是大月（31天）？',o:['一月','四月','九月'],a:0},
-            {t:'填空',q:'2024年是闰年，2月有（ ）天。',a:'29'},
-            {t:'填空',q:'下午3时用24时计时法表示是（ ）时。',a:'15',hint:'3+12=15'}
-          ]}
-        ]},
-        {u:'四 家居中的学问——小数的初步认识',lessons:[
-          {t:'小数的读写与比较',k:'概念',text:'像0.1、0.5、3.2这样带小数点的数叫小数。读小数：整数部分按整数读，小数点读“点”。',qs:[
-            {t:'填空',q:'0.8 读作：零点（ ）。',a:'八'},
-            {t:'选择',q:'比较大小：0.3 和 0.7，哪个大？',o:['0.7','0.3','一样大'],a:0},
-            {t:'填空',q:'5元3角 =（ ）元。',a:'5.3',hint:'3角=0.3元'}
-          ]}
-        ]},
-        {u:'五 繁忙的工地——线和角',lessons:[
-          {t:'直线、射线、线段与角',k:'概念',text:'线段有两个端点，射线有一个端点，直线没有端点。角用符号“∠”表示。',qs:[
-            {t:'选择',q:'下面哪个图形没有端点？',o:['直线','线段','射线'],a:0},
-            {t:'填空',q:'角的大小与两边（ ）的长短无关，与张口大小有关。',a:'边',hint:'填“边”'},
-            {t:'选择',q:'直角是多少度？',o:['90°','180°','360°'],a:0}
-          ]}
-        ]},
-        {u:'六 保护大天鹅——三位数乘两位数',lessons:[
-          {t:'三位数乘两位数',k:'计算',text:'口算：先算0前面的数再数0；笔算：用两位数个位、十位分别去乘，末位对齐相加。',qs:[
-            {t:'填空',q:'200×30 =（ ）。',a:'6000'},
-            {t:'填空',q:'123×20 =（ ）。',a:'2460'},
-            {t:'选择',q:'根据12×3=36，可知120×30=？',o:['3600','360','36000'],a:0}
-          ]}
-        ]},
-        {u:'七 交通中的线——平行与相交',lessons:[
-          {t:'平行与垂直',k:'概念',text:'同一平面内不相交的两条直线互相平行；相交成直角时互相垂直，交点叫垂足。',qs:[
-            {t:'选择',q:'同一平面内不相交的两条直线（ ）。',o:['互相平行','互相垂直','一定相交'],a:0},
-            {t:'填空',q:'两条直线相交成（ ）角时，这两条直线互相垂直。',a:'直',hint:'直角'},
-            {t:'选择',q:'数学书的邻边互相（ ）。',o:['垂直','平行','相等'],a:0}
-          ]}
-        ]},
-        {u:'八 收获的季节——除数是两位数的除法',lessons:[
-          {t:'除数是两位数的除法',k:'计算',text:'先看被除数的前两位，不够除看前三位；试商、调商，每次余数都要比除数小。',qs:[
-            {t:'填空',q:'60÷20 =（ ）。',a:'3'},
-            {t:'填空',q:'144÷12 =（ ）。',a:'12'},
-            {t:'选择',q:'被除数和除数同时乘2，商（ ）。',o:['不变','乘2','除以2'],a:0}
-          ]}
-        ]},
-        {u:'九 快捷的物流运输——解决问题',lessons:[
-          {t:'速度、时间、路程',k:'概念',text:'路程 = 速度 × 时间；速度 = 路程 ÷ 时间；时间 = 路程 ÷ 速度。',qs:[
-            {t:'填空',q:'一辆汽车每小时行60千米，2小时行（ ）千米。',a:'120'},
-            {t:'选择',q:'“速度×时间=路程”中，路程的单位通常是？',o:['千米','千米/时','时'],a:0},
-            {t:'填空',q:'两地相距240千米，车每小时行80千米，需要（ ）小时。',a:'3'}
-          ]}
-        ]},
-        {u:'十 小小志愿者——混合运算',lessons:[
-          {t:'四则混合运算',k:'概念',text:'没有括号时先乘除后加减；有括号先算括号里面的。',qs:[
-            {t:'选择',q:'12+8×3 应该先算什么？',o:['8×3','12+8','随便'],a:0},
-            {t:'填空',q:'(12+8)×3 =（ ）。',a:'60'},
-            {t:'选择',q:'下面运算顺序正确的是？',o:['先括号，再乘除，后加减','从左到右依次算','先加减后乘除'],a:0}
-          ]}
-        ]},
-        {u:'十一 新校服——条形统计图',lessons:[
-          {t:'认识条形统计图',k:'概念',text:'条形统计图用直条的长短表示数量多少；1格可以代表1个或多个单位。',qs:[
-            {t:'选择',q:'条形统计图是用什么表示数量的？',o:['直条的长短','圆的大小','线的曲直'],a:0},
-            {t:'填空',q:'如果1格代表5人，3格代表（ ）人。',a:'15'},
-            {t:'选择',q:'要比较几个班的图书数量，用哪种图最合适？',o:['条形统计图','地图','象形文字'],a:0}
-          ]}
-        ]}
-      ]},
-      {grade:'四年级上册',term:'预习',units:[
-        {u:'一 大数知多少——万以上数的认识',lessons:[
-          {t:'数位顺序表与读数',k:'概念',text:'数位顺序：个级（个、十、百、千）、万级（万、十万、百万、千万）、亿级（亿、十亿…）。',qs:[
-            {t:'填空',q:'10个十万是（ ）。',a:'一百万',hint:'十万→百万'},
-            {t:'填空',q:'从右边起，第（ ）位是亿位。',a:'九',hint:'个级4+万级4+亿位1'},
-            {t:'选择',q:'305008000 读作？',o:['三亿零五百万八千','三亿五百万八千','三十五亿八千'],a:0}
-          ]},
-          {t:'写数与改写、近似数',k:'计算',text:'把整万、整亿数改写成用“万”或“亿”作单位；求近似数用“四舍五入”法。',qs:[
-            {t:'填空',q:'把460000改写成用“万”作单位的数是（ ）万。',a:'46'},
-            {t:'填空',q:'省略亿位后面的尾数：394000000≈（ ）亿。',a:'4',hint:'千万位是9，要入'},
-            {t:'选择',q:'用“四舍五入”法把149500000凑成亿，约（ ）。',o:['1亿','2亿','15亿'],a:0}
-          ]}
-        ]},
-        {u:'二 繁忙的工地——线和角',lessons:[
-          {t:'线段、射线、直线',k:'概念',text:'线段有限长、2端点；射线无限长、1端点；直线无限长、0端点。过一点可画无数条直线。',qs:[
-            {t:'选择',q:'下面哪个图形可以量出长度？',o:['线段','直线','射线'],a:0},
-            {t:'填空',q:'（ ）个端点也没有，可以向两端无限延伸。',a:'直线'},
-            {t:'选择',q:'手电筒发出的光可以看作什么线？',o:['射线','线段','曲线'],a:0}
-          ]},
-          {t:'角的度量与分类',k:'概念',text:'用量角器量角，单位“°”。锐角<90°，直角=90°，钝角>90°且<180°，平角=180°，周角=360°。',qs:[
-            {t:'填空',q:'直角是（ ）度。',a:'90'},
-            {t:'选择',q:'大于90°而小于180°的角是？',o:['钝角','锐角','平角'],a:0},
-            {t:'填空',q:'1周角 =（ ）个平角。',a:'2',hint:'360÷180'}
-          ]}
-        ]},
-        {u:'三 保护天鹅——三位数乘两位数',lessons:[
-          {t:'口算与笔算',k:'计算',text:'口算整百数乘整十数先算0前面的数再数0；笔算末位对齐，分别去乘。',qs:[
-            {t:'填空',q:'300×40 =（ ）。',a:'12000'},
-            {t:'填空',q:'123×30 =（ ）。',a:'3690'},
-            {t:'选择',q:'145×12 积的末尾数字是？',o:['0','2','4'],a:0,hint:'5×2=10，末位0'}
-          ]},
-          {t:'积的变化规律',k:'概念',text:'一个因数不变，另一个因数乘几，积也乘几。',qs:[
-            {t:'选择',q:'如果15×4=60，那么15×8=？',o:['120','240','60'],a:0,hint:'8是4的2倍'},
-            {t:'填空',q:'A×B=200，若A不变、B×5，则积是（ ）。',a:'1000'},
-            {t:'选择',q:'积的变化规律说明（ ）。',o:['因数变，积也跟着变','积永远不变','与因数无关'],a:0}
-          ]}
-        ]},
-        {u:'四 交通中的线——平行与相交',lessons:[
-          {t:'平行与垂直',k:'概念',text:'平行线：同一平面内不相交的两条直线；垂线：相交成直角的两条直线，交点叫垂足。',qs:[
-            {t:'选择',q:'下面哪组线互相平行？',o:['双杠的两条横杠','交叉的公路','打开的剪刀'],a:0},
-            {t:'填空',q:'两条直线相交成直角，这两条直线互相（ ）。',a:'垂直'},
-            {t:'选择',q:'长方形相对的边互相（ ）。',o:['平行','垂直','相等'],a:0}
-          ]},
-          {t:'距离',k:'概念',text:'两点之间线段最短；从直线外一点到这条直线所画的垂线段最短（点到直线的距离）。',qs:[
-            {t:'填空',q:'两点之间，（ ）最短。',a:'线段'},
-            {t:'选择',q:'从直线外一点到这条直线，最短的是？',o:['垂线段','斜线','曲线'],a:0},
-            {t:'填空',q:'点到直线的距离，是这点到直线的（ ）线段的长度。',a:'垂',hint:'垂直'}
-          ]}
-        ]},
-        {u:'五 收获的季节——除数是两位数的除法',lessons:[
-          {t:'口算、估算与笔算',k:'计算',text:'整十数除想乘法算除法；笔算先看前两位，不够看前三位，除到哪位商哪位，余数小于除数。',qs:[
-            {t:'填空',q:'80÷40 =（ ）。',a:'2'},
-            {t:'填空',q:'120÷20 =（ ）。',a:'6'},
-            {t:'选择',q:'试商时如果余数比除数大，说明商（ ）。',o:['小了，要调大','大了','正好'],a:0}
-          ]},
-          {t:'商的变化规律',k:'概念',text:'被除数和除数同时乘或除以相同的数（0除外），商不变。',qs:[
-            {t:'选择',q:'被除数和除数同时除以3，商（ ）。',o:['不变','除以3','乘3'],a:0},
-            {t:'填空',q:'根据200÷40=5，可得20÷4=（ ）。',a:'5'},
-            {t:'选择',q:'下面利用了商不变规律的是？',o:['竖式简便计算','加法交换律','乘法'],a:0}
-          ]}
-        ]},
-        {u:'六 快捷的物流运输——解决问题',lessons:[
-          {t:'速度、时间、路程',k:'概念',text:'速度×时间=路程；路程÷速度=时间；路程÷时间=速度。常用单位：千米/时、米/分。',qs:[
-            {t:'填空',q:'小明每分钟走60米，5分钟走（ ）米。',a:'300'},
-            {t:'选择',q:'“千米/时”是表示什么的单位？',o:['速度','路程','时间'],a:0},
-            {t:'填空',q:'甲车2小时行160千米，速度是（ ）千米/时。',a:'80'}
-          ]},
-          {t:'相遇问题',k:'概念',text:'相遇问题：总路程 =（甲速度+乙速度）×相遇时间。',qs:[
-            {t:'填空',q:'甲乙相向而行，甲速50、乙速30，2小时共走（ ）千米。',a:'160',hint:'(50+30)×2'},
-            {t:'选择',q:'“两人同时出发、相向而行”是哪种问题？',o:['相遇问题','追及问题','植树问题'],a:0},
-            {t:'填空',q:'两地相距240千米，速度和80千米/时，相遇要（ ）小时。',a:'3'}
-          ]}
-        ]},
-        {u:'七 小小志愿者——混合运算',lessons:[
-          {t:'四则混合运算',k:'概念',text:'没有括号：先乘除后加减；有括号：先小括号，再中括号，最后括号外。',qs:[
-            {t:'选择',q:'24÷4+2 先算什么？',o:['24÷4','4+2','24÷4+2'],a:0},
-            {t:'填空',q:'120-20×5 =（ ）。',a:'20',hint:'先算20×5=100'},
-            {t:'填空',q:'[100-(20+30)]×2 =（ ）。',a:'100',hint:'100-50=50，再×2'}
-          ]}
-        ]},
-        {u:'八 新校服——条形统计图',lessons:[
-          {t:'认识条形统计图',k:'概念',text:'用直条表示数量多少；1格可代表1、2、5、10…个单位，要根据数据大小合理选择。',qs:[
-            {t:'选择',q:'画条形统计图时，1格代表几要（ ）。',o:['根据数据合理选择','固定为1','越大越好'],a:0},
-            {t:'填空',q:'1格代表10，某班得5格，数量是（ ）人。',a:'50'},
-            {t:'选择',q:'要清楚比较各组数据多少，最好用（ ）。',o:['条形统计图','折线图','饼图'],a:0}
-          ]}
-        ]}
-      ]}
-    ]},
+    数学:{grades:[{grade:'三年级下册',term:'复习',units:[{u:'一 繁忙的工地——线与角',lessons:[{t:'线段、射线与直线',k:'概念',text:'线段有两个端点，可以量长度；射线有一个端点，向一端无限延伸；直线没有端点，向两端无限延伸。过一点能画无数条直线，过两点只能画一条直线。',qs:[{t:'选择',q:'下面哪种线可以量出长度？',o:['线段','射线','直线'],a:0},{t:'填空',q:'把线段向一端无限延长，就得到一条（ ）。',a:'射线',hint:'一个端点'},{t:'选择',q:'经过一点能画多少条直线？',o:['无数条','1条','2条'],a:0}]},{t:'角的认识与度量',k:'概念',text:'从一点引出两条射线所组成的图形叫作角，用符号∠表示。角的大小与边的长短无关，与两边张开的大小有关。用量角器量角时，中心与顶点重合，0°刻度线与一边重合。',qs:[{t:'填空',q:'角的大小与两边的（ ）无关，与两边张开的大小有关。',a:'长短'},{t:'选择',q:'直角是多少度？',o:['90°','180°','360°'],a:0},{t:'填空',q:'1周角 =（ ）个平角 =（ ）个直角。',a:'2、4',hint:'周角360°'}]}]},{u:'主题活动 年、月、日的秘密',lessons:[{t:'年、月、日与24时计时',k:'概念',text:'一年有12个月，大月31天（1、3、5、7、8、10、12），小月30天（4、6、9、11），平年2月28天，闰年2月29天。一天24小时，普通计时法要加“上午/下午”，24时计时法不用。',qs:[{t:'选择',q:'下面哪个月是大月？',o:['7月','2月','4月'],a:0},{t:'填空',q:'平年全年有（ ）天，闰年2月有（ ）天。',a:'365、29'},{t:'填空',q:'下午3时用24时计时法表示是（ ）时。',a:'15'}]}]},{u:'二 美丽的公园——图形与周长',lessons:[{t:'认识周长',k:'概念',text:'封闭图形一周的长度就是它的周长。测量周长可以用绕绳法、滚动法，也可以用直尺量出各边长度再相加。',qs:[{t:'填空',q:'封闭图形（ ）的长度，就是它的周长。',a:'一周'},{t:'选择',q:'比较下面图形的周长时，应该测量什么？',o:['一周的长度','面积','颜色'],a:0},{t:'选择',q:'边长为3厘米的正方形，周长是（ ）厘米。',o:['12','9','6'],a:0}]},{t:'长方形和正方形的周长',k:'计算',text:'长方形周长 =（长+宽）×2，正方形周长 = 边长×4。计算时可以先看图形有几条边，再把对应的长度相加。',qs:[{t:'填空',q:'长方形长5厘米、宽3厘米，周长是（ ）厘米。',a:'16',hint:'(5+3)×2'},{t:'填空',q:'正方形边长6厘米，周长是（ ）厘米。',a:'24'},{t:'选择',q:'用一根20厘米的铁丝围成长方形，长+宽=（ ）厘米。',o:['10','20','5'],a:0}]}]},{u:'三 绿色生态园——解决问题',lessons:[{t:'连乘、连除解决实际问题',k:'应用',text:'遇到“每份×份数×层数”等连续相乘的问题，可以分步列连乘算式；知道总量和每份数，求份数可以用连除，也可以用总量÷（每份数×份数）。',qs:[{t:'选择',q:'3个花坛，每个花坛种4行花，每行8棵，一共有多少棵？列式为？',o:['3×4×8','3+4+8','3×8'],a:0},{t:'填空',q:'120个苹果，每盒装4个，每箱装6盒，可以装（ ）箱。',a:'5',hint:'120÷4÷6'},{t:'选择',q:'“先求一盒多少钱，再求一箱多少钱”属于哪种思路？',o:['连乘','连除','加法和减法'],a:0}]}]},{u:'四 我家圆了安居梦——长方形、正方形的面积',lessons:[{t:'面积的意义和单位',k:'概念',text:'物体表面或封闭图形的大小就是它们的面积。常用面积单位有平方厘米（cm²）、平方分米（dm²）、平方米（m²）。边长1厘米的正方形面积是1平方厘米。',qs:[{t:'填空',q:'边长1分米的正方形，面积是1（ ）。',a:'平方分米'},{t:'选择',q:'测量课桌面的大小，用哪个单位合适？',o:['平方分米','平方厘米','平方米'],a:0},{t:'填空',q:'指甲盖的面积大约是1（ ）。',a:'平方厘米'}]},{t:'长方形和正方形的面积计算',k:'计算',text:'长方形面积 = 长×宽，正方形面积 = 边长×边长。计算时要注意单位统一，最后的结果要用面积单位。',qs:[{t:'填空',q:'长方形长7厘米、宽4厘米，面积是（ ）平方厘米。',a:'28'},{t:'填空',q:'正方形边长5分米，面积是（ ）平方分米。',a:'25'},{t:'选择',q:'一个长方形长扩大2倍，宽不变，面积（ ）。',o:['扩大2倍','不变','扩大4倍'],a:0}]}]},{u:'五 大数知多少——万以上数的认识',lessons:[{t:'万以上数的读法和写法',k:'概念',text:'从个位起每四位一级：个级、万级、亿级。读数从高位读起，每级末尾的0不读，中间连续几个0只读一个“零”。写数时哪一位上一个单位也没有就写0。',qs:[{t:'填空',q:'从右边起，第（ ）位是万位，第（ ）位是亿位。',a:'5、9'},{t:'选择',q:'30500060 读作？',o:['三千零五十万零六十','三千零五万零六十','三千零五百万六十'],a:0},{t:'填空',q:'一个数由3个亿、5个百万和7个一组成，写作（ ）。',a:'305000007'}]},{t:'数的大小比较和改写',k:'计算',text:'比较数的大小，位数多的数大；位数相同从最高位比起。整万、整亿的数可以改写成用“万”或“亿”作单位；求近似数用“四舍五入”法。',qs:[{t:'填空',q:'把460000改写成用“万”作单位的数是（ ）万。',a:'46'},{t:'选择',q:'299500000省略亿位后面的尾数约是（ ）亿。',o:['3','2','30'],a:0},{t:'填空',q:'98765000 ≈（ ）万（保留到万位）。',a:'9877',hint:'千位是5，入'}]}]},{u:'主题活动 度量衡的故事',lessons:[{t:'质量单位与单位换算',k:'概念',text:'计量较重物品有多重，常用吨（t）作单位；计量一般物品用千克（kg）；较轻物品用克（g）。1吨=1000千克，1千克=1000克。',qs:[{t:'填空',q:'1吨=（ ）千克，1千克=（ ）克。',a:'1000、1000'},{t:'选择',q:'一辆卡车的载质量约是5（ ）。',o:['吨','千克','克'],a:0},{t:'填空',q:'3000克=（ ）千克，4吨=（ ）千克。',a:'3、4000'}]}]},{u:'六 订校服——条形统计图',lessons:[{t:'认识条形统计图',k:'概念',text:'条形统计图用直条的长短表示数量的多少。直条越高，表示数量越多；直条越低，表示数量越少。看图时要先看横轴和纵轴表示什么。',qs:[{t:'选择',q:'条形统计图是用（ ）表示数量多少的。',o:['直条的长短','圆的大小','线的曲直'],a:0},{t:'填空',q:'如果1格代表2人，某项目占了5格，表示有（ ）人。',a:'10'},{t:'选择',q:'要比较几个班的人数，用（ ）最合适。',o:['条形统计图','折线图','饼图'],a:0}]},{t:'一格表示多个单位',k:'应用',text:'当数据比较大时，1格可以代表2、5、10、20等多个单位。选择一格代表几，要根据数据的大小和统计图的格数来决定。',qs:[{t:'选择',q:'数据较大时，条形统计图1格可以代表（ ）。',o:['多个单位','只能1个','不能表示'],a:0},{t:'填空',q:'1格代表5棵，4格表示（ ）棵。',a:'20'},{t:'选择',q:'画统计图时，1格代表几要（ ）。',o:['根据数据合理选择','固定为1','越大越好'],a:0}]}]},{u:'智慧广场',lessons:[{t:'周期问题',k:'思维',text:'周期问题是指按照一定规律重复排列的问题。解决时先找出周期长度，再用总数除以周期，看余数是几，余数是几就是周期里的第几个。',qs:[{t:'填空',q:'按“红、黄、蓝、红、黄、蓝……”排列，第10个是（ ）色。',a:'黄',hint:'10÷3=3余1'},{t:'选择',q:'周期问题首先要做什么？',o:['找出规律周期','随便数','用乘法'],a:0},{t:'填空',q:'今天是星期五，再过14天是星期（ ）。',a:'五',hint:'14÷7=2余0'}]}]},{u:'七 农业大丰收——多位数除以两位数',lessons:[{t:'除数是两位数的口算与估算',k:'计算',text:'口算整十数除整十、整百数，可以想乘法算除法，也可以把被除数和除数末尾同时去掉一个0再算。估算时把被除数或除数看成接近的整十、整百数。',qs:[{t:'填空',q:'80÷20 =（ ）。',a:'4'},{t:'填空',q:'123÷40 ≈（ ）。',a:'3',hint:'把123看作120'},{t:'选择',q:'估算350÷68时，可以把68看作（ ）。',o:['70','60','80'],a:0}]},{t:'除数是两位数的笔算',k:'计算',text:'笔算除数是两位数的除法，先看被除数的前两位，不够除看前三位；除到哪一位商就写在哪一位上；每次余下的数必须比除数小。',qs:[{t:'填空',q:'192÷24 =（ ）。',a:'8'},{t:'选择',q:'试商时余数比除数大，说明商（ ）。',o:['小了，要调大','大了，要调小','正好'],a:0},{t:'填空',q:'除法中，被除数和除数同时乘5，商（ ）。',a:'不变'}]}]},{u:'八 总复习',lessons:[{t:'三年级下册总复习',k:'复习',text:'复习线与角、图形周长与面积、解决问题、万以上数的认识、条形统计图和除法，把知识点梳理成网，查漏补缺。',qs:[{t:'选择',q:'下面哪个图形没有端点？',o:['直线','射线','线段'],a:0},{t:'填空',q:'长方形长8厘米、宽5厘米，周长（ ）厘米，面积（ ）平方厘米。',a:'26、40'},{t:'选择',q:'比较450000和54000的大小，结果正确的是？',o:['450000>54000','450000<54000','一样大'],a:0}]}]}]},{grade:'四年级上册',term:'预习',units:[{u:'一 泰山古树——计算器',lessons:[{t:'计算器的认识与使用',k:'操作',text:'计算器上有数字键、运算符号键、等号键、清除键（AC/C）等。计算时要按正确的顺序输入数字和符号，可以用计算器验证复杂计算的结果。',qs:[{t:'填空',q:'计算器上的清除键通常用字母（ ）或C表示。',a:'AC'},{t:'选择',q:'用计算器计算25×48，最后应按（ ）键。',o:['=','+','×'],a:0},{t:'填空',q:'计算器中，输入错误可以按（ ）键清除。',a:'清除'}]}]},{u:'二 节能减排——用字母表示数',lessons:[{t:'用字母表示数',k:'概念',text:'字母可以表示一个不确定的数，也可以表示数量关系。例如：小红今年a岁，爸爸比她大28岁，爸爸今年（a+28）岁。数字与字母相乘时，乘号可省略，数字写在前面。',qs:[{t:'填空',q:'一支铅笔a元，买5支需要（ ）元。',a:'5a'},{t:'选择',q:'a×5可以写成（ ）。',o:['5a','a5','a+5'],a:0},{t:'填空',q:'长方形的长是a厘米，宽是b厘米，周长是（ ）厘米。',a:'2(a+b)',hint:'也可写成2a+2b'}]},{t:'用字母表示数量关系',k:'应用',text:'路程=速度×时间，可以写成 s=vt；正方形面积=边长×边长，可以写成 S=a²。用字母表示公式更简洁，也便于记忆。',qs:[{t:'填空',q:'速度用v表示，时间用t表示，路程s=（ ）。',a:'vt'},{t:'选择',q:'a²表示（ ）。',o:['a×a','a+a','a×2'],a:0},{t:'填空',q:'当a=4时，a²=（ ），2a=（ ）。',a:'16、8'}]}]},{u:'三 快乐农场——运算律',lessons:[{t:'加法运算律',k:'概念',text:'加法交换律：a+b=b+a；加法结合律：(a+b)+c=a+(b+c)。运用运算律可以使计算更简便，例如凑整十、整百。',qs:[{t:'填空',q:'a+b=b+（ ）。',a:'a'},{t:'选择',q:'36+78+64=36+64+78运用了什么运算律？',o:['加法交换律','加法结合律','乘法交换律'],a:0},{t:'填空',q:'(25+68)+32=25+(68+（ ）)。',a:'32'}]},{t:'乘法运算律',k:'概念',text:'乘法交换律：a×b=b×a；乘法结合律：(a×b)×c=a×(b×c)；乘法分配律：(a+b)×c=a×c+b×c。合理运用可以凑整，使计算简便。',qs:[{t:'填空',q:'(a+b)×c = a×c + （ ）。',a:'b×c'},{t:'选择',q:'25×(40+4)=25×40+25×4运用了什么律？',o:['乘法分配律','乘法结合律','乘法交换律'],a:0},{t:'填空',q:'125×7×8 = 125×（ ）×7 = 7000。',a:'8'}]}]},{u:'四 巧手小工匠——认识多边形',lessons:[{t:'三角形的认识与分类',k:'概念',text:'由三条线段围成的图形叫三角形。三角形按角分有锐角三角形、直角三角形、钝角三角形；按边分有等腰三角形、等边三角形。三角形具有稳定性。',qs:[{t:'选择',q:'自行车车架做成三角形，是利用了三角形的（ ）。',o:['稳定性','易变形','美观'],a:0},{t:'填空',q:'三角形有（ ）条边、（ ）个角、（ ）个顶点。',a:'3、3、3'},{t:'选择',q:'三个角都是锐角的三角形叫（ ）。',o:['锐角三角形','直角三角形','钝角三角形'],a:0}]},{t:'平行四边形和梯形',k:'概念',text:'两组对边分别平行的四边形是平行四边形；只有一组对边平行的四边形是梯形。平行四边形易变形，具有不稳定性。',qs:[{t:'填空',q:'（ ）组对边分别平行的四边形叫平行四边形。',a:'两'},{t:'选择',q:'只有一组对边平行的四边形是（ ）。',o:['梯形','平行四边形','长方形'],a:0},{t:'选择',q:'长方形是特殊的（ ）。',o:['平行四边形','梯形','三角形'],a:0}]},{t:'图形的密铺',k:'实践',text:'密铺是指用形状、大小完全相同的一种或几种平面图形进行拼接，使彼此之间不留空隙、不重叠地铺成一片。三角形、四边形、正六边形等可以密铺。',qs:[{t:'选择',q:'下面哪种图形能单独密铺？',o:['正六边形','正五边形','圆'],a:0},{t:'填空',q:'用形状、大小完全相同的图形，不留空隙、不重叠地铺成一片，叫作（ ）。',a:'密铺'},{t:'选择',q:'下面哪个图形不能单独密铺？',o:['正五边形','正方形','正三角形'],a:0}]}]},{u:'五 动物世界——小数的意义和性质',lessons:[{t:'小数的意义',k:'概念',text:'像0.1、0.05、3.25这样的数叫作小数。一位小数表示十分之几，两位小数表示百分之几，三位小数表示千分之几。小数由整数部分、小数点和小数部分组成。',qs:[{t:'填空',q:'0.7表示（ ）分之（ ）。',a:'十、七'},{t:'选择',q:'0.05里面有（ ）个0.01。',o:['5','50','0.5'],a:0},{t:'填空',q:'3.25中，“2”在（ ）位上，表示2个（ ）。',a:'十分、0.1',hint:'小数点后第一位是十分位'}]},{t:'小数的性质和大小比较',k:'概念',text:'小数的末尾添上“0”或去掉“0”，小数的大小不变。比较小数大小时，先比整数部分，整数部分相同再依次比十分位、百分位……',qs:[{t:'填空',q:'0.50 =（ ）。',a:'0.5'},{t:'选择',q:'下面与3.080相等的是（ ）。',o:['3.08','3.8','3.80'],a:0},{t:'填空',q:'比较大小：2.35 ○ 2.4，填“>”或“<”。',a:'<'}]},{t:'小数点移动与名数改写',k:'计算',text:'小数点向右移动一位，小数就扩大到原来的10倍；向左移动一位，就缩小到原来的1/10。把低级单位改写成高级单位要除以进率，高级单位改写成低级单位要乘进率。',qs:[{t:'填空',q:'把3.6的小数点向右移动两位是（ ）。',a:'360'},{t:'选择',q:'0.05扩大到原来的100倍是（ ）。',o:['5','50','0.5'],a:0},{t:'填空',q:'350克 =（ ）千克。',a:'0.35',hint:'350÷1000'}]}]},{u:'六 趣味拼搭——观察物体',lessons:[{t:'从不同方向观察物体',k:'空间',text:'从不同方向（前面、上面、侧面）观察同一个立体图形，看到的形状可能不同。观察时要注意看到的小正方形有几列、几行，以及它们的相对位置。',qs:[{t:'选择',q:'从（ ）方向观察同一个物体，看到的形状可能不同。',o:['不同','相同','任何'],a:0},{t:'填空',q:'观察物体时，通常从前面、（ ）面和侧面观察。',a:'上'},{t:'选择',q:'用4个同样的小正方体搭成一个立体图形，从上面看和从侧面看（ ）。',o:['可能不同','一定相同','一定不同'],a:0}]}]},{u:'七 小牛崽成长记——小数加减法',lessons:[{t:'小数加减法',k:'计算',text:'计算小数加减法，要先把小数点对齐（也就是相同数位对齐），再按照整数加减法的方法计算，最后在得数里对齐横线上的小数点。',qs:[{t:'填空',q:'计算小数加减法时，要先把（ ）对齐。',a:'小数点'},{t:'选择',q:'3.25+1.8=（ ）。',o:['5.05','5.5','4.05'],a:0},{t:'填空',q:'5.6-2.34 =（ ）。',a:'3.26'}]},{t:'小数加减混合运算',k:'计算',text:'小数加减混合运算的顺序和整数一样：没有括号从左往右算，有括号先算括号里面的。整数加法的运算律对小数加法同样适用。',qs:[{t:'填空',q:'12.5-3.8+2.2 =（ ）。',a:'10.9'},{t:'选择',q:'3.6+5.7+6.4=3.6+6.4+5.7运用了什么律？',o:['加法交换律','加法结合律','乘法交换律'],a:0},{t:'填空',q:'(8.5+3.2)-2.5 =（ ）。',a:'9.2'}]},{t:'智慧广场 重叠问题',k:'思维',text:'解决重叠问题时，可以用画图的方法帮助理解。两部分的总数 = 第一部分 + 第二部分 - 重叠部分。',qs:[{t:'填空',q:'班里参加跳绳的有8人，参加跑步的有6人，两项都参加的有2人，一共有（ ）人参加。',a:'12',hint:'8+6-2'},{t:'选择',q:'重叠问题中，求总数时要（ ）重叠部分。',o:['减去','加上','不变'],a:0},{t:'填空',q:'会游泳的有15人，会骑车的有12人，两项都会的有5人，至少会一项的有（ ）人。',a:'22'}]}]},{u:'八 今天我当家——小数乘法',lessons:[{t:'小数乘整数',k:'计算',text:'小数乘整数，先按整数乘法算出积，再看因数中有几位小数，就从积的右边起数出几位点上小数点。',qs:[{t:'填空',q:'0.6×4 =（ ）。',a:'2.4'},{t:'选择',q:'2.5×4 =（ ）。',o:['10','1.0','100'],a:0},{t:'填空',q:'1.25×8 =（ ）。',a:'10'}]},{t:'小数乘小数',k:'计算',text:'小数乘小数，先按整数乘法算出积，再看两个因数一共有几位小数，就从积的右边起数出几位点上小数点。位数不够时用0补足。',qs:[{t:'填空',q:'0.3×0.4 =（ ）。',a:'0.12'},{t:'选择',q:'2.5×0.4 的积是（ ）。',o:['1','0.1','10'],a:0},{t:'填空',q:'0.25×0.4 =（ ）。',a:'0.1'}]}]},{u:'九 我锻炼我健康——平均数',lessons:[{t:'平均数',k:'概念',text:'平均数能较好地反映一组数据的整体水平。求平均数可以用“移多补少”的方法，也可以用“总数量÷总份数=平均数”。',qs:[{t:'填空',q:'小明3次跳绳分别是80下、90下、100下，平均每次跳（ ）下。',a:'90'},{t:'选择',q:'求平均数的方法是（ ）。',o:['总数量÷总份数','总数量×总份数','总份数-总数量'],a:0},{t:'填空',q:'一组数据中，平均数比最大的数（ ），比最小的数（ ）。',a:'小、大'}]},{t:'分段统计',k:'应用',text:'分段统计是把数据按照一定范围分成几段，分别统计每段的数量。分段统计可以用统计表或条形统计图表示，便于分析数据分布。',qs:[{t:'选择',q:'分段统计适合分析（ ）。',o:['数据分布情况','单个数据','平均数'],a:0},{t:'填空',q:'把同学们的身高按“140以下、140~150、150以上”分段，属于（ ）统计。',a:'分段'},{t:'选择',q:'分段统计后，通常用（ ）来表示结果。',o:['统计表或条形统计图','折线图','饼图'],a:0}]},{t:'消费知多少',k:'实践',text:'通过调查、记录自己的日常消费，学会整理数据、计算平均消费，培养合理消费、节约用钱的好习惯。',qs:[{t:'填空',q:'记录一周每天花的钱，可以用（ ）求出平均每天花多少钱。',a:'平均数'},{t:'选择',q:'“消费知多少”主要培养我们的（ ）。',o:['合理消费意识','计算速度','画图能力'],a:0},{t:'填空',q:'一个月消费1200元，平均每天约消费（ ）元。',a:'40',hint:'1200÷30'}]}]},{u:'十 游三峡——小数除法',lessons:[{t:'除数是整数的小数除法',k:'计算',text:'除数是整数的小数除法，按整数除法的方法计算，商的小数点要和被除数的小数点对齐。如果除到被除数末尾仍有余数，就在余数后面添0继续除。',qs:[{t:'填空',q:'9.6÷4 =（ ）。',a:'2.4'},{t:'选择',q:'7.2÷6 =（ ）。',o:['1.2','12','0.12'],a:0},{t:'填空',q:'小数除以整数，商的小数点要和（ ）的小数点对齐。',a:'被除数'}]},{t:'除数是小数的小数除法',k:'计算',text:'除数是小数时，要先把除数变成整数：除数的小数点向右移动几位，被除数的小数点也向右移动几位（位数不够补0），再按除数是整数的方法计算。',qs:[{t:'填空',q:'1.2÷0.3 =（ ）。',a:'4'},{t:'选择',q:'0.48÷0.6 =（ ）。',o:['0.8','8','0.08'],a:0},{t:'填空',q:'把0.56÷0.7转化成除数是整数的除法，是（ ）÷7。',a:'5.6'}]}]},{u:'回顾整理——总复习',lessons:[{t:'四年级上册总复习',k:'复习',text:'复习用字母表示数、运算律、多边形的认识、小数的意义与四则运算、观察物体、平均数等知识，形成知识网络，为下学期做好准备。',qs:[{t:'填空',q:'a×b×c=a×(b×c) 表示（ ）律。',a:'乘法结合'},{t:'选择',q:'0.5×0.2 =（ ）。',o:['0.1','0.01','1'],a:0},{t:'填空',q:'等边三角形三条边都（ ），三个角都是（ ）度。',a:'相等、60'}]}]}]}]},
     英语:{grades:[
       {grade:'三年级下册',term:'复习',units:[
         {u:'Unit 1 Food and drink',lessons:[
@@ -1112,7 +959,7 @@ function seedTasks(){
   a.push(T('语文·快乐阅读（课外书15分钟）','语文','快乐阅读','阅读',8,'daily',true,null,'任选课外书，大声朗读或默读'));
   a.push(T('语文·生字词闯关（听写/抄写10词）','语文','生字词','复习',8,'daily',true,'water','三下复习+四上预习字词'));
   a.push(T('语文·预习四上新课（标段·圈生字）','语文','预习新课','预习',10,'daily',true,'golden','看明天要学的课文'));
-  a.push(T('数学·计算训练（口算/笔算10题）','数学','计算训练','练习',8,'daily',true,null,'四上乘除/大数为主'));
+  a.push(T('数学·计算训练（口算/笔算10题）','数学','计算训练','练习',8,'daily',true,null,'四上小数/运算律/平均数为主'));
   a.push(T('数学·应用探险（1道生活应用题）','数学','应用探险','练习',10,'daily',true,null,'结合生活情境'));
   a.push(T('英语·单词打卡（10词会读会拼）','英语','单词打卡','单词',8,'daily',true,'water','鲁科版三下+四上前2单元'));
   a.push(T('英语·课文跟读模仿（录音15分钟）','英语','课文跟读','跟读',8,'daily',true,null,'模仿语音语调'));
@@ -1149,28 +996,30 @@ function seedTasks(){
   a.push(bk('语文园地八《别董大》','六'));
   a.push(bk('《论语》学而不思则罔','六'));
   a.push(bk('《论语》君子周而不比','六'));
-  // —— 数学·四年级上册预习（青岛版五四制·2/3内容）——
+  // —— 数学·四年级上册预习（青岛版五四制）——
   const mp=(t)=>T('数学·预习四上·'+t,'数学','预习新课','预习',12,'once',true,'golden','暑假提前熟悉新学期');
-  a.push(mp('①大数知多少（万以上数的认识）'));
-  a.push(mp('②线和角'));
-  a.push(mp('③保护大天鹅·三位数乘两位数'));
-  a.push(mp('④交通中的线·平行与相交'));
-  a.push(mp('⑤收获的季节·除数是两位数的除法'));
-  a.push(mp('⑥解决问题（速度·路程·相遇）'));
-  a.push(mp('⑦小小志愿者·混合运算'));
-  a.push(mp('⑧新校服·条形统计图'));
-  // —— 数学·三年级下册复习（青岛版五四制·1/3内容）——
+  a.push(mp('①计算器'));
+  a.push(mp('②用字母表示数'));
+  a.push(mp('③运算律'));
+  a.push(mp('④认识多边形与图形的密铺'));
+  a.push(mp('⑤小数的意义和性质'));
+  a.push(mp('⑥观察物体'));
+  a.push(mp('⑦小数加减法'));
+  a.push(mp('⑧小数乘法'));
+  a.push(mp('⑨平均数与消费知多少'));
+  a.push(mp('⑩小数除法'));
+  // —— 数学·三年级下册复习（青岛版五四制）——
   const mr=(t)=>T('数学·复习三下·'+t,'数学','错题消灭','复习',10,'once',false,null,'巩固已学，查漏补缺');
-  a.push(mr('对称与轴对称图形'));
+  a.push(mr('线与角'));
+  a.push(mr('图形与周长'));
+  a.push(mr('解决问题'));
+  a.push(mr('长方形、正方形的面积'));
   a.push(mr('万以上数的认识'));
-  a.push(mr('年、月、日（24时计时法）'));
-  a.push(mr('小数的初步认识'));
-  a.push(mr('线和角'));
-  a.push(mr('三位数乘两位数'));
-  a.push(mr('平行与相交'));
-  a.push(mr('除数是两位数的除法'));
-  a.push(mr('解决问题/混合运算'));
-  a.push(mr('条形统计图/植树问题'));
+  a.push(mr('条形统计图'));
+  a.push(mr('多位数除以两位数'));
+  a.push(mr('年、月、日的秘密/度量衡的故事'));
+  a.push(mr('智慧广场'));
+  a.push(mr('总复习'));
   // —— 英语·分层（来自老师要求）——
   a.push(T('英语·单元复盘（每周1个单元）','英语','单元复盘','复习',15,'once',true,null,'梳理主题/句型/语法'));
   a.push(T('英语·读写小练习（每周2次）','英语','读写训练','练习',12,'once',false,null,'填空/仿写/补全对话'));
@@ -1184,7 +1033,7 @@ function seedTasks(){
 }
 function defaultState(){
   return{
-    v:1,profile:{name:'',element:'golden',created:todayStr()},
+    v:1,profile:{name:'',element:'golden',created:todayStr(),avatar:'',school:'',cls:'',age:''},
     energy:0,totalEnergy:0,dark:0,shield:2,streak:0,bestStreak:0,lastSettled:todayStr(),
     trainDay:{},onceDone:{},done:{},
     skills:defaultSkills(),tasks:seedTasks(),rewards:seedRewards(),
@@ -1208,6 +1057,8 @@ function migrate(){
   S.onceDone=S.onceDone||{};S.done=S.done||{};S.trainDay=S.trainDay||{};
   S.rewards=S.rewards||seedRewards();S.shop=S.shop||{skins:['default'],equipped:'default'};
   S.settings=S.settings||{deadline:'21:00',parentPin:'1234'};
+  S.profile=S.profile||{name:'',element:'golden',created:todayStr()};
+  S.profile.avatar=S.profile.avatar||'';S.profile.school=S.profile.school||'';S.profile.cls=S.profile.cls||'';S.profile.age=S.profile.age||'';
   S.log=S.log||[];S.medals=S.medals||[];S.boss=S.boss||null;S.daily=S.daily||{};S.bossLog=S.bossLog||[];S.studyDone=S.studyDone||{};S.wordDone=S.wordDone||{};S.reciteDone=S.reciteDone||{};
 }
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){toast('保存失败：存储空间不足');}}
@@ -1448,24 +1299,38 @@ function render(){
 }
 
 function renderNav(){
-  const items=[['home','🏠','忍者主页'],['study','📚','教材修炼'],['recite','📜','背诵闯关'],['words','🔤','单词跟读'],['randword','🎲','随机跟读'],['tasks','📋','学习任务'],['train','🥋','修炼场'],['skills','🌟','技能修炼'],['boss','⚔️','每周BOSS'],['medals','🏅','勋章墙'],['cal','📅','暑假日历'],['shop','🛒','奖励商城'],['log','📓','战绩日志']];
-  if(UI.mode==='parent')items.push(['parent','⚙️','家长中心']);
-  $('#nav').innerHTML=items.map(([v,ic,lb])=>
-    '<div class="nav-btn'+(UI.view===v?' active':'')+'" data-nav="'+v+'"><span class="ic">'+ic+'</span>'+lb+'</div>').join('');
+  const groups=[
+    {label:'首页',items:[['home','🏠','忍者主页']]},
+    {label:'修炼',items:[['study','📚','教材修炼'],['recite','📜','背诵闯关'],['words','🔤','单词跟读'],['randword','🎲','随机跟读']]},
+    {label:'成长',items:[['train','🥋','修炼场'],['skills','🌟','技能修炼'],['boss','⚔️','每周BOSS'],['medals','🏅','勋章墙'],['cal','📅','暑假日历']]},
+    {label:'管理',items:[['tasks','📋','学习任务'],['shop','🛒','奖励商城'],['log','📓','战绩日志']]},
+    {label:'我的',items:[['profile','👤','我的信息']]}
+  ];
+  let html='';
+  groups.forEach(g=>{
+    html+='<div class="nav-grp"><div class="nav-grp-label">'+g.label+'</div>'+
+      g.items.map(([v,ic,lb])=>
+        '<div class="nav-btn'+(UI.view===v?' active':'')+'" data-nav="'+v+'"><span class="ic">'+ic+'</span>'+lb+'</div>').join('')+
+      '</div>';
+  });
+  if(UI.mode==='parent')html+='<div class="nav-grp"><div class="nav-grp-label">家长</div><div class="nav-btn'+(UI.view==='parent'?' active':'')+'" data-nav="parent"><span class="ic">⚙️</span>家长中心</div></div>';
+  $('#nav').innerHTML=html;
 }
 
 function renderHUD(){
   const el=ELEMENTS[S.profile.element]||ELEMENTS.golden;
-  const av=$('#avatar');av.style.background='radial-gradient(circle at 30% 30%,'+el.color+',#0c1530)';
-  $('#avatarBadge').textContent=el.emoji;
+  const av=$('#avatar');
+  if(S.profile.avatar){av.classList.add('static');av.style.background='none';av.innerHTML='<img src="'+S.profile.avatar+'" alt="'+esc(S.profile.name)+'"><span class="badge" id="avatarBadge">'+el.emoji+'</span>';}
+  else{av.classList.remove('static');av.style.background='radial-gradient(circle at 30% 30%,'+el.color+',#0c1530)';av.innerHTML='🥷<span class="badge" id="avatarBadge">'+el.emoji+'</span>';}
   $('#whoName').textContent=S.profile.name||'忍者学员';
   $('#whoRank').textContent=rank()+' · '+el.name+'属性';
+  $('#whoSub').textContent=[S.profile.school,S.profile.cls].filter(Boolean).join(' · ');
   const sealed=isSealed();
-  $('#stats').innerHTML=
-    '<div class="stat energy">🔋<span class="lbl">能量</span>'+S.energy+'</div>'+
-    '<div class="stat dark">🌑<span class="lbl">黑暗</span>'+S.dark+'/'+MAXDARK+'</div>'+
-    '<div class="stat streak">🔥<span class="lbl">连击</span>'+S.streak+'</div>'+
-    '<div class="stat shield">🛡️<span class="lbl">护盾</span>'+S.shield+'</div>'+
+  $('#statgrid').innerHTML=
+    '<div class="stat energy">🔋<span class="lbl">能量</span><b>'+S.energy+'</b></div>'+
+    '<div class="stat dark">🌑<span class="lbl">黑暗</span><b>'+S.dark+'/'+MAXDARK+'</b></div>'+
+    '<div class="stat streak">🔥<span class="lbl">连击</span><b>'+S.streak+'</b></div>'+
+    '<div class="stat shield">🛡️<span class="lbl">护盾</span><b>'+S.shield+'</b></div>'+
     (sealed?'<div class="stat" style="color:#c08bff">⛔封印</div>':'');
 }
 
@@ -1968,17 +1833,77 @@ function modalBackup(){
     '<div class="modal-actions"><button class="btn green" id="b_code_ok">恢复</button></div></div>'+
     '<div class="modal-actions"><button class="btn ghost" data-action="close">关闭</button></div>';
 }
+/* —— 我的信息（自定义头像/姓名/学校/班级/年龄/重新选角色） —— */
+let _pfAvatar='';
+function modalProfile(){
+  const p=S.profile;
+  let html='<h3>👤 我的信息</h3>';
+  html+='<div class="field"><label>头像</label><div class="pf-av-row">';
+  html+='<div class="pf-av-prev" id="pf_av_prev">'+(p.avatar?'<img src="'+p.avatar+'">':'🥷')+'</div>';
+  html+='<div class="pf-av-actions"><label class="btn gold sm" style="text-align:center;cursor:pointer">📷 上传照片<input id="pf_av_file" type="file" accept="image/*" style="display:none"></label>';
+  html+='<button class="btn ghost sm" id="pf_av_reset" type="button">恢复默认头像</button></div></div>';
+  html+='<div class="muted" style="margin-top:6px">或选择忍者角色头像：</div>';
+  html+='<div class="elem-pick" id="pf_elem">';
+  EL_ORDER.forEach(e=>{const E=ELEMENTS[e];html+='<div class="elem-opt'+(p.element===e?' sel':'')+'" data-el="'+e+'"><div class="e"><img src="'+IMGCHAR[e]+'" alt="'+E.ninja+'"></div><div class="n">'+E.name+'·'+E.ninja+'</div></div>';});
+  html+='</div></div>';
+  html+='<div class="field"><label>忍者名字</label><input id="pf_name" value="'+esc(p.name)+'" maxlength="12"></div>';
+  html+='<div class="field"><label>学校</label><input id="pf_school" value="'+esc(p.school)+'" maxlength="20" placeholder="如：实验小学"></div>';
+  html+='<div class="field"><label>班级</label><input id="pf_cls" value="'+esc(p.cls)+'" maxlength="10" placeholder="如：四年级3班"></div>';
+  html+='<div class="field"><label>年龄</label><input id="pf_age" type="number" min="1" max="20" value="'+esc(p.age)+'" placeholder="如：9"></div>';
+  html+='<div class="modal-actions"><button class="btn ghost" data-action="close">取消</button><button class="btn gold" id="pf_ok" type="button">保存</button></div>';
+  return html;
+}
+function openProfileModal(){_pfAvatar=S.profile.avatar||'';openModal(modalProfile());bindProfile();}
+function bindProfile(){
+  const prev=$('#pf_av_prev');
+  const file=$('#pf_av_file');
+  if(file)file.addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const rd=new FileReader();
+    rd.onload=()=>{const img=new Image();img.onload=()=>{
+      let w=img.width,h=img.height,max=256;
+      if(w>h&&w>max){h=Math.round(h*max/w);w=max;}else if(h>max){w=Math.round(w*max/h);h=max;}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      _pfAvatar=c.toDataURL('image/jpeg',0.85);prev.innerHTML='<img src="'+_pfAvatar+'">';
+    };img.src=rd.result;};
+    rd.readAsDataURL(f);
+  });
+  const reset=$('#pf_av_reset');
+  if(reset)reset.addEventListener('click',()=>{_pfAvatar='';prev.innerHTML='🥷';});
+  document.querySelectorAll('#pf_elem .elem-opt').forEach(o=>o.addEventListener('click',()=>{
+    document.querySelectorAll('#pf_elem .elem-opt').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');
+  }));
+  const ok=$('#pf_ok');
+  if(ok)ok.addEventListener('click',()=>{
+    const selEl=document.querySelector('#pf_elem .elem-opt.sel');
+    const p=S.profile;
+    p.avatar=_pfAvatar;
+    p.element=selEl?selEl.dataset.el:p.element;
+    p.name=$('#pf_name').value.trim()||'忍者学员';
+    p.school=$('#pf_school').value.trim();
+    p.cls=$('#pf_cls').value.trim();
+    p.age=$('#pf_age').value.trim();
+    save();closeModal();render();toast('已更新我的信息');
+  });
+}
 
 /* ============ 事件 ============ */
 function bindApp(){
   // nav
-  document.querySelectorAll('#nav .nav-btn').forEach(b=>b.addEventListener('click',()=>{UI.view=b.dataset.nav;if(UI.view==='parent'&&UI.mode!=='parent'){askParent();return;}render();}));
+  document.querySelectorAll('#nav .nav-btn').forEach(b=>b.addEventListener('click',()=>{
+    const v=b.dataset.nav;
+    if(v==='profile'){openProfileModal();return;}
+    UI.view=v;
+    if(UI.view==='parent'&&UI.mode!=='parent'){askParent();return;}
+    closeSidebar();render();
+  }));
   // generic actions
   document.querySelectorAll('[data-action]').forEach(el=>{
     el.addEventListener('click',()=>{
       const a=el.dataset.action;
       if(a==='check')checkIn(el.dataset.id);
-      else if(a==='go'){UI.view=el.dataset.view;render();}
+      else if(a==='go'){UI.view=el.dataset.view;closeSidebar();render();}
       else if(a==='study-sub'){UI.studySub=el.dataset.sub;UI.studyLesson=null;render();}
       else if(a==='study-lesson'){UI.studyLesson=el.dataset.g+'-'+el.dataset.u+'-'+el.dataset.l;render();}
       else if(a==='study-back'){UI.studyLesson=null;render();}
@@ -2049,10 +1974,11 @@ function askParent(){
   if(pin===S.settings.parentPin){UI.mode='parent';render();}
   else toast('密码错误');
 }
+function closeSidebar(){$('#sidebar').classList.remove('open');$('#scrim').classList.remove('show');}
 function bindGlobal(){
   $('#modebtn').addEventListener('click',()=>{
     if(UI.mode==='kid'){askParent();}
-    else{UI.mode='kid';UI.view=UI.view==='parent'?'home':UI.view;render();}
+    else{UI.mode='kid';UI.view=UI.view==='parent'?'home':UI.view;closeSidebar();render();}
   });
   $('#hamb').addEventListener('click',()=>{$('#sidebar').classList.toggle('open');$('#scrim').classList.toggle('show');});
   $('#scrim').addEventListener('click',()=>{$('#sidebar').classList.remove('open');$('#scrim').classList.remove('show');});
@@ -2119,7 +2045,19 @@ const MATH_FACT={
   'sym':[{t:'填空',q:'轴对称图形沿着（ ）对折后两边能完全重合',a:'对称轴'},{t:'填空',q:'正方形有（ ）条对称轴',a:'4'},{t:'填空',q:'长方形有（ ）条对称轴',a:'2'},{t:'选择',q:'下面哪个是轴对称图形？',o:['等腰三角形','平行四边形','任意梯形'],a:0}],
   'stat':[{t:'填空',q:'条形统计图用（ ）的长短表示数量的多少',a:'直条'},{t:'填空',q:'画条形统计图时，要先确定一格代表（ ）',a:'多少'},{t:'选择',q:'条形统计图中，直条越长表示数量越（ ）',o:['多','少','一样'],a:0}],
   'mix':[{t:'计算',q:'计算：12+8×3=',a:'36'},{t:'计算',q:'计算：25-4×5=',a:'5'},{t:'计算',q:'计算：6×7-20=',a:'22'},{t:'计算',q:'计算：40÷5+8=',a:'16'},{t:'计算',q:'计算：100-3×20=',a:'40'},{t:'计算',q:'计算：9×9-17=',a:'64'}],
-  'word':[{t:'填空',q:'买3个笔记本，每个5元，一共（ ）元',a:'15'},{t:'填空',q:'一本书84页，每天看12页，（ ）天看完',a:'7'},{t:'填空',q:'一箱苹果重24千克，4箱重（ ）千克',a:'96'},{t:'选择',q:'小明有20元，花8元买笔，还剩？',o:['12元','28元','8元'],a:0},{t:'填空',q:'每包糖有6颗，5包共有（ ）颗',a:'30'}]
+  'word':[{t:'填空',q:'买3个笔记本，每个5元，一共（ ）元',a:'15'},{t:'填空',q:'一本书84页，每天看12页，（ ）天看完',a:'7'},{t:'填空',q:'一箱苹果重24千克，4箱重（ ）千克',a:'96'},{t:'选择',q:'小明有20元，花8元买笔，还剩？',o:['12元','28元','8元'],a:0},{t:'填空',q:'每包糖有6颗，5包共有（ ）颗',a:'30'}],
+  'calc':[{t:'填空',q:'计算器上的清除键通常用字母（ ）表示',a:'AC'},{t:'选择',q:'用计算器计算25×48，最后应按（ ）键',o:['=','×','+'],a:0},{t:'填空',q:'计算器可以帮助我们做较复杂的（ ）',a:'计算'}],
+  'algebra':[{t:'填空',q:'a×5可以写成（ ）',a:'5a'},{t:'填空',q:'长方形的长用a表示，宽用b表示，面积S=（ ）',a:'ab'},{t:'选择',q:'当a=4时，a²等于（ ）',o:['16','8','4'],a:0}],
+  'laws':[{t:'填空',q:'加法交换律：a+b=（ ）',a:'b+a'},{t:'填空',q:'乘法分配律：(a+b)×c=a×c+（ ）',a:'b×c'},{t:'选择',q:'25×4×8=25×8×4运用了什么律？',o:['乘法交换律','乘法结合律','乘法分配律'],a:0}],
+  'polygon':[{t:'填空',q:'三角形有（ ）条边',a:'3'},{t:'选择',q:'只有一组对边平行的四边形是（ ）',o:['梯形','平行四边形','长方形'],a:0},{t:'填空',q:'平行四边形有（ ）组对边分别平行',a:'两'}],
+  'tiling':[{t:'填空',q:'用形状、大小相同的图形不留空隙、不重叠地铺成一片，叫作（ ）',a:'密铺'},{t:'选择',q:'下面哪种图形能单独密铺？',o:['正六边形','正五边形','圆'],a:0},{t:'选择',q:'下面哪种图形不能单独密铺？',o:['正五边形','正方形','正三角形'],a:0}],
+  'view':[{t:'填空',q:'观察物体通常从前面、上面和（ ）面观察',a:'侧'},{t:'选择',q:'从不同的方向观察同一个物体，看到的形状（ ）',o:['可能不同','一定相同','一定不同'],a:0},{t:'填空',q:'从（ ）方向观察，看到的小正方形位置可能不一样',a:'不同'}],
+  'decimal':[{t:'填空',q:'0.5表示（ ）分之（ ）',a:'十、五'},{t:'填空',q:'小数点右边第一位是（ ）位',a:'十分'},{t:'选择',q:'0.3和0.30相比（ ）',o:['相等','0.3大','0.30大'],a:0}],
+  'average':[{t:'填空',q:'求平均数的方法：总数量÷（ ）=平均数',a:'总份数'},{t:'选择',q:'一组数据：10、20、30，平均数是（ ）',o:['20','30','60'],a:0},{t:'填空',q:'平均数能较好地反映一组数据的（ ）水平',a:'整体'}],
+  'area':[{t:'填空',q:'长方形面积=（ ）×（ ）',a:'长、宽'},{t:'填空',q:'正方形面积=（ ）×（ ）',a:'边长、边长'},{t:'选择',q:'边长4厘米的正方形，面积是（ ）平方厘米',o:['16','12','8'],a:0}],
+  'perimeter':[{t:'填空',q:'长方形周长=（长+宽）×（ ）',a:'2'},{t:'填空',q:'正方形周长=边长×（ ）',a:'4'},{t:'选择',q:'长5厘米、宽3厘米的长方形周长是（ ）厘米',o:['16','15','8'],a:0}],
+  'mass':[{t:'填空',q:'1吨=（ ）千克',a:'1000'},{t:'填空',q:'1千克=（ ）克',a:'1000'},{t:'选择',q:'一辆卡车的载质量通常用（ ）作单位',o:['吨','千克','克'],a:0}],
+  'cycle':[{t:'填空',q:'今天是星期三，再过7天是星期（ ）',a:'三'},{t:'选择',q:'按“红、黄、蓝”循环，第7个是（ ）',o:['蓝','红','黄'],a:0},{t:'填空',q:'解决周期问题要先找出（ ）',a:'规律'}]
 };
 function genArith(sp,g,u){
   const rng=_rng(_hash('math'+g+'_'+u+'_'+sp.op));
@@ -2139,16 +2077,27 @@ function genMath(g,u){
   let out=[];
   if(name.indexOf('万以上')>=0||name.indexOf('大数')>=0)out=out.concat(MATH_FACT.read);
   else if(name.indexOf('年月日')>=0)out=out.concat(MATH_FACT.date);
-  else if(name.indexOf('小数')>=0)out=out.concat(genArith({op:'decimal',n:20},g,u));
-  else if(name.indexOf('乘')>=0)out=out.concat(genArith({op:'*',a:[100,999],b:[10,99],n:20},g,u));
-  else if(name.indexOf('除')>=0)out=out.concat(genArith({op:'/',a:[10,99],b:[2,9],n:20},g,u));
+  else if(name.indexOf('计算器')>=0)out=out.concat(MATH_FACT.calc);
+  else if(name.indexOf('字母')>=0)out=out.concat(MATH_FACT.algebra);
+  else if(name.indexOf('运算律')>=0)out=out.concat(MATH_FACT.laws);
+  else if(name.indexOf('多边形')>=0||name.indexOf('三角形')>=0||name.indexOf('梯形')>=0||name.indexOf('平行四边形')>=0)out=out.concat(MATH_FACT.polygon);
+  else if(name.indexOf('密铺')>=0)out=out.concat(MATH_FACT.tiling);
+  else if(name.indexOf('观察物体')>=0)out=out.concat(MATH_FACT.view);
+  else if(name.indexOf('小数')>=0)out=out.concat(MATH_FACT.decimal,genArith({op:'decimal',n:10},g,u));
+  else if(name.indexOf('乘')>=0)out=out.concat(genArith({op:'*',a:[100,999],b:[10,99],n:10},g,u));
+  else if(name.indexOf('除')>=0)out=out.concat(genArith({op:'/',a:[10,99],b:[2,9],n:10},g,u));
   else if(name.indexOf('混合运算')>=0)out=out.concat(MATH_FACT.mix);
   else if(name.indexOf('线和角')>=0||name.indexOf('角')>=0)out=out.concat(MATH_FACT.angle);
   else if(name.indexOf('平行')>=0||name.indexOf('相交')>=0)out=out.concat(MATH_FACT.geo);
   else if(name.indexOf('对称')>=0)out=out.concat(MATH_FACT.sym);
   else if(name.indexOf('条形统计')>=0)out=out.concat(MATH_FACT.stat);
+  else if(name.indexOf('平均数')>=0)out=out.concat(MATH_FACT.average);
   else if(name.indexOf('解决问题')>=0)out=out.concat(MATH_FACT.word);
-  else out=out.concat(genArith({op:'+',a:[10,999],b:[10,999],n:20},g,u));
+  else if(name.indexOf('面积')>=0)out=out.concat(MATH_FACT.area);
+  else if(name.indexOf('周长')>=0)out=out.concat(MATH_FACT.perimeter);
+  else if(name.indexOf('度量衡')>=0||name.indexOf('质量')>=0||name.indexOf('吨')>=0)out=out.concat(MATH_FACT.mass);
+  else if(name.indexOf('智慧广场')>=0||name.indexOf('周期')>=0||name.indexOf('重叠')>=0)out=out.concat(MATH_FACT.cycle);
+  else out=out.concat(genArith({op:'+',a:[10,999],b:[10,999],n:10},g,u));
   return out;
 }
 function autoGen(g,u,l,ls){
@@ -2175,7 +2124,7 @@ function studyHTML(){
   });
   tabs+='</div>';
   if(!CONTENT.subjects[UI.studySub]){
-    return tabs+'<div class="card"><h2>🚧 '+UI.studySub+'修炼 · 即将开放</h2><div class="muted">数学（青岛版五四制）、英语（鲁科版·外研社山东科技）的教材题库正在按整本教材整理中，下一版开放。先用「语文修炼」把整本书过一遍吧！</div></div>';
+    return tabs+'<div class="card"><h2>🚧 '+UI.studySub+'修炼 · 即将开放</h2><div class="muted">该科目的教材题库正在整理中，下一版开放。先用其他科目修炼吧！</div></div>';
   }
   if(UI.studyLesson){
     const p=UI.studyLesson.split('-').map(Number);
@@ -2489,7 +2438,11 @@ function rwStep(d){ if(!UI.rw)return; const n=UI.rw.list.length; UI.rw.idx=(UI.r
 function rwPlay(){ if(!UI.rw)return; const w=UI.rw.list[UI.rw.idx]; playWord(w.en,'en'); }
 function rwMark(){ if(!UI.rw)return; const w=UI.rw.list[UI.rw.idx]; const key=w.gi+'-'+w.ui+'-'+w.wi; if(S.wordDone[key]){delete S.wordDone[key];}else{S.wordDone[key]=true;addLog('🔤 随机跟读：'+w.en,'gain');} checkMedals();save();render(); }
 function renderRandWord(){
-  if(!UI.rw){openRandWord();return '';}
+  if(!UI.rw){
+    if(!RW_SRC){RW_SRC=[];CONTENT.wordBank.grades.forEach((gr,gi)=>gr.units.forEach((un,ui)=>un.words.forEach((w,wi)=>RW_SRC.push({gi:gi,ui:ui,wi:wi,en:w.en,zh:w.zh}))));}
+    const list=RW_SRC.slice();shuffleArr(list);
+    UI.rw={list:list,idx:0};
+  }
   const w=UI.rw.list[UI.rw.idx];
   const total=UI.rw.list.length;
   const done=!!S.wordDone[w.gi+'-'+w.ui+'-'+w.wi];
