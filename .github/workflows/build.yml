@@ -1,4 +1,4 @@
-name: Build Windows App
+name: Build Android App
 
 on:
   push:
@@ -9,10 +9,14 @@ on:
 permissions:
   contents: write
 
+env:
+  ANDROID_HOME: /usr/local/lib/android/sdk
+  NDK_VERSION: 25.2.9519653
+
 jobs:
-  build-windows:
-    name: Build Windows (msi / nsis)
-    runs-on: windows-latest
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,28 +26,46 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install Rust toolchain
+      - name: Install Rust toolchain (with Android target)
         uses: dtolnay/rust-toolchain@stable
-
-      - name: Add MSVC to PATH (Rust needs the MSVC linker)
-        uses: ilammy/msvc-dev-cmd@v1
         with:
-          arch: x64
+          targets: aarch64-linux-android
+
+      - name: Setup Java (JDK 17, required by Android Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages & NDK
+        run: |
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;${{ env.NDK_VERSION }}"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ env.NDK_VERSION }}" >> "$GITHUB_ENV"
 
       - name: Install frontend dependencies
         run: npm install
 
-      - name: Build & bundle with Tauri
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectPath: .
+      - name: Init Tauri Android (generates gen/android + conf)
+        run: npx tauri android init
 
-      - name: Upload bundle as artifact
+      - name: Build Android APK (debug, no signing needed)
+        run: npx tauri android build --apk --debug
+
+      - name: Upload APK artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ninjago-windows-${{ github.run_number }}
-          path: src-tauri/target/release/bundle/**/*
+          name: ninjago-android-${{ github.run_number }}
+          path: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
           if-no-files-found: warn
+
+      - name: Publish to GitHub Release (tag builds only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
