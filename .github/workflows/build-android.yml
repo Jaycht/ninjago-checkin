@@ -31,30 +31,34 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: 'platforms;android-34,build-tools;34.0.0,platform-tools'
+      - name: Setup Android SDK & NDK
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          curl -s -o /tmp/cmdtools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q /tmp/cmdtools.zip -d $ANDROID_HOME/cmdline-tools
+          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;25.2.9519653"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
 
-      - name: Setup Android NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r26d
-          link-to-sdk: true
+      - name: Show SDK/NDK paths
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "NDK_HOME=$NDK_HOME"
+          ls "$NDK_HOME" | head
 
       - name: Install npm dependencies
         run: npm install
 
       - name: Init Android project
-        env:
-          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
         run: npx tauri android init
 
       - name: Build Android APK (debug)
-        env:
-          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: npx tauri android build --debug
 
       - name: List APK outputs
