@@ -1,0 +1,49 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows (msi / nsis)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Add MSVC to PATH (Rust needs the MSVC linker)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build & bundle with Tauri
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: .
+
+      - name: Upload bundle as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ninjago-windows-${{ github.run_number }}
+          path: src-tauri/target/release/bundle/**/*
+          if-no-files-found: warn
