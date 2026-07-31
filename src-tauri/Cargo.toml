@@ -16,3 +16,11 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+# 体积优化：release 构建去掉调试符号、按体积优化
+[profile.release]
+panic = "abort"
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1

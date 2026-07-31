@@ -46,29 +46,31 @@ jobs:
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
           echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
 
-      - name: Show SDK/NDK paths
-        run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "NDK_HOME=$NDK_HOME"
-          ls "$NDK_HOME" | head
-
       - name: Install npm dependencies
         run: npm install
 
       - name: Init Android project
         run: npx tauri android init
 
-      - name: Build Android APK (debug)
-        run: npx tauri android build --debug
+      # release 构建 + 按 ABI 拆分（去掉 debug 符号、单架构，体积从 439MB 降到约 10-20MB）
+      - name: Build Android APK (release, split per ABI)
+        run: npx tauri android build --release --apk --split-per-abi
 
-      - name: List APK outputs
-        run: find src-tauri/gen/android -name "*.apk" -exec ls -lh {} \;
+      - name: Prepare APKs (只留手机架构)
+        run: |
+          A64=$(find src-tauri/gen/android -name "*arm64-v8a*.apk" | head -1)
+          AV7=$(find src-tauri/gen/android -name "*armeabi-v7a*.apk" | head -1)
+          cp "$A64" ninjago-arm64-release.apk
+          cp "$AV7" ninjago-armv7-release.apk
+          ls -lh ninjago-arm64-release.apk ninjago-armv7-release.apk
 
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: android-v1.0.0
-          name: 忍者打卡 Android APK
-          files: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          tag_name: android-v1.1.0
+          name: 忍者打卡 Android APK (release)
+          files: |
+            ninjago-arm64-release.apk
+            ninjago-armv7-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
