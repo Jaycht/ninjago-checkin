@@ -51,6 +51,37 @@ jobs:
       - name: Init Tauri Android (generates gen/android + conf)
         run: npx tauri android init
 
+      - name: Patch Android (orientation + INTERNET + label)
+        continue-on-error: true
+        run: |
+          python3 - <<'PY'
+          import re, pathlib
+
+          manifest = pathlib.Path('src-tauri/gen/android/app/src/main/AndroidManifest.xml')
+          if manifest.exists():
+              t = manifest.read_text(encoding='utf-8')
+              if 'android.permission.INTERNET' not in t:
+                  if 'xmlns:android=' not in t:
+                      t = t.replace('<manifest', '<manifest xmlns:android="http://schemas.android.com/apk/res/android"', 1)
+                  t = t.replace('</manifest>', '    <uses-permission android:name="android.permission.INTERNET" />\n</manifest>')
+              t2 = re.sub(r'(<activity\b[^>]*?)(\sandroid:screenOrientation="[^"]*")', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
+              if t2 == t:
+                  t2 = re.sub(r'(<activity\b)', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
+              manifest.write_text(t2, encoding='utf-8')
+              print('AndroidManifest patched (INTERNET + sensor orientation)')
+          else:
+              print('AndroidManifest not found, skip')
+
+          strings = pathlib.Path('src-tauri/gen/android/app/src/main/res/values/strings.xml')
+          if strings.exists():
+              s = strings.read_text(encoding='utf-8')
+              s2 = re.sub(r'(<string name="app_name"[^>]*>)[^<]*(</string>)', r'\1幻影忍者学习\2', s, count=1)
+              strings.write_text(s2, encoding='utf-8')
+              print('app label set to 幻影忍者学习')
+          else:
+              print('strings.xml not found, skip')
+          PY
+
       - name: Build Android APK (debug, no signing needed)
         run: npx tauri android build --apk --debug
 

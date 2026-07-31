@@ -22,19 +22,6 @@
     ],
     "security": {
       "csp": null
-    },
-    "android": {
-      "package_name": "com.ninjago.checkin",
-      "version": "1.0.0",
-      "version_code": "1",
-      "label": "幻影忍者学习",
-      "icon": "icons/icon.png",
-      "orientation": "sensor",
-      "depth": 32,
-      "permissions": [
-        "INTERNET",
-        "ACCESS_NETWORK_STATE"
-      ]
     }
   },
   "bundle": {
