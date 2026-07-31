@@ -1,0 +1,70 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34,build-tools;34.0.0,platform-tools'
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r26d
+          link-to-sdk: true
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Init Android project
+        env:
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        run: npx tauri android init
+
+      - name: Build Android APK (debug)
+        env:
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: npx tauri android build --debug
+
+      - name: List APK outputs
+        run: find src-tauri/gen/android -name "*.apk" -exec ls -lh {} \;
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: android-v1.0.0
+          name: 忍者打卡 Android APK
+          files: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
