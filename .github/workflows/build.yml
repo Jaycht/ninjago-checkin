@@ -60,15 +60,20 @@ jobs:
           manifest = pathlib.Path('src-tauri/gen/android/app/src/main/AndroidManifest.xml')
           if manifest.exists():
               t = manifest.read_text(encoding='utf-8')
+              if 'xmlns:android=' not in t:
+                  t = t.replace('<manifest', '<manifest xmlns:android="http://schemas.android.com/apk/res/android"', 1)
+              perms=''
               if 'android.permission.INTERNET' not in t:
-                  if 'xmlns:android=' not in t:
-                      t = t.replace('<manifest', '<manifest xmlns:android="http://schemas.android.com/apk/res/android"', 1)
-                  t = t.replace('</manifest>', '    <uses-permission android:name="android.permission.INTERNET" />\n</manifest>')
+                  perms+='    <uses-permission android:name="android.permission.INTERNET" />\n'
+              if 'android.permission.CAMERA' not in t:
+                  perms+='    <uses-permission android:name="android.permission.CAMERA" />\n'
+              if perms:
+                  t=t.replace('</manifest>', perms+'</manifest>')
               t2 = re.sub(r'(<activity\b[^>]*?)(\sandroid:screenOrientation="[^"]*")', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
               if t2 == t:
                   t2 = re.sub(r'(<activity\b)', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
               manifest.write_text(t2, encoding='utf-8')
-              print('AndroidManifest patched (INTERNET + sensor orientation)')
+              print('AndroidManifest patched (INTERNET + CAMERA + sensor orientation)')
           else:
               print('AndroidManifest not found, skip')
 
