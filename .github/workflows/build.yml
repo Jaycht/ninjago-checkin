@@ -99,6 +99,72 @@ jobs:
               print('build.gradle.kts import removed (Properties ambiguous fix)')
           else:
               print('build.gradle.kts not found, skip')
+
+          # ---- 状态栏颜色与 APP 图标：让系统状态栏背景不再留空，
+          #      并显式覆盖 Android mipmap，防止 Tauri 自动转换没生效。 ----
+          for themes_path in [
+              pathlib.Path('src-tauri/gen/android/app/src/main/res/values/themes.xml'),
+              pathlib.Path('src-tauri/gen/android/app/src/main/res/values-night/themes.xml'),
+          ]:
+              if themes_path.exists():
+                  tt = themes_path.read_text(encoding='utf-8')
+                  if 'android:statusBarColor' in tt:
+                      tt = re.sub(r'(<item\s+name="android:statusBarColor">)[^<]+(</item>)',
+                                  r'\1#1a0f3e\2', tt, count=1)
+                  else:
+                      tt = re.sub(r'(</style>)',
+                                  r'        <item name="android:statusBarColor">#1a0f3e</item>\n    \1',
+                                  tt, count=1)
+                  themes_path.write_text(tt, encoding='utf-8')
+                  print(f'{themes_path.name}: statusBarColor set to #1a0f3e')
+
+          try:
+              from PIL import Image
+          except ImportError:
+              subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--quiet', 'pillow'])
+              from PIL import Image
+
+          icon_src = pathlib.Path('src-tauri/icons/icon.png')
+          if icon_src.exists():
+              im = Image.open(icon_src).convert('RGBA')
+              res_dir = pathlib.Path('src-tauri/gen/android/app/src/main/res')
+              sizes = {
+                  'mipmap-mdpi': 48,
+                  'mipmap-hdpi': 72,
+                  'mipmap-xhdpi': 96,
+                  'mipmap-xxhdpi': 144,
+                  'mipmap-xxxhdpi': 192,
+              }
+              def make_icon(src_im, size):
+                  canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+                  thumb = src_im.copy()
+                  thumb.thumbnail((size, size), Image.LANCZOS)
+                  x = (size - thumb.width) // 2
+                  y = (size - thumb.height) // 2
+                  canvas.paste(thumb, (x, y), thumb)
+                  return canvas
+              for folder, size in sizes.items():
+                  d = res_dir / folder
+                  if not d.exists():
+                      continue
+                  icon = make_icon(im, size)
+                  icon.save(d / 'ic_launcher.png', 'PNG')
+                  icon.save(d / 'ic_launcher_round.png', 'PNG')
+                  icon.save(d / 'ic_launcher_foreground.png', 'PNG')
+                  print(f'android icon {folder} -> {size}x{size}')
+              anydpi = res_dir / 'mipmap-anydpi-v26'
+              if anydpi.exists():
+                  xml = '''<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@android:color/transparent"/>
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>
+'''
+                  for nm in ('ic_launcher.xml', 'ic_launcher_round.xml'):
+                      (anydpi / nm).write_text(xml, encoding='utf-8')
+                  print('adaptive icon xml updated')
+          else:
+              print('src-tauri/icons/icon.png not found, skip explicit icon override')
           PY
 
       - name: Setup Android release signing (debug keystore for sideload)
@@ -107,18 +173,27 @@ jobs:
       - name: Build Android APK (release, stripped & smaller)
         run: npx tauri android build --apk
 
+      - name: Rename APK with app name and version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          src_apk=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' | head -n 1)
+          if [ -z "$src_apk" ]; then echo "APK not found"; exit 1; fi
+          dst_name="九漫成长营-${{ github.ref_name }}.apk"
+          cp "$src_apk" "$dst_name"
+          echo "Renamed APK to $dst_name"
+
       - name: Upload APK artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ninjago-android-${{ github.run_number }}
-          path: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          path: 九漫成长营-*.apk
           if-no-files-found: warn
 
       - name: Publish to GitHub Release (tag builds only)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+          files: 九漫成长营-*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
