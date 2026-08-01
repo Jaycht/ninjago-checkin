@@ -85,16 +85,18 @@ jobs:
 
           # ---- 修复 Tauri 2.x 生成的 build.gradle.kts 里 `import java.util.Properties`
           #      与 Gradle Kotlin DSL 默认导入的 kotlin.properties.Properties 冲突(ambiguous)，
-          #      导致脚本编译失败 (Script compilation errors: Conflicting import 'Properties') ----
-          #      做法：删掉该 import 行，并把代码中裸 `Properties` 改为全限定 `java.util.Properties`
-          #      （保留 load/getProperty，且不影响 localProperties 这类标识符）。
+          #      导致脚本编译失败 (Script compilation errors: Conflicting import 'Properties')。
+          #      根因：Gradle 的 Kotlin DSL 默认已导入 kotlin.properties.*，故裸 `Properties`
+          #      本就解析为 kotlin.properties.Properties(其 API 同样含 load/getProperty)。
+          #      做法：仅删除该行 import 即可消除冲突；绝不能改为 `java.util.Properties`，
+          #      因为 build.gradle.kts 脚本上下文里 `java` 被 JavaPluginExtension 遮蔽，
+          #      写成 java.util.Properties 会报 "Unresolved reference: util"。 ----
           gradle_kts = pathlib.Path('src-tauri/gen/android/app/build.gradle.kts')
           if gradle_kts.exists():
               g = gradle_kts.read_text(encoding='utf-8')
-              g = g.replace('import java.util.Properties\r\n', '').replace('import java.util.Properties\n', '')
-              g = re.sub(r'(?<![.\w])Properties', 'java.util.Properties', g)
+              g = re.sub(r'^\s*import\s+java\.util\.Properties\s*[\r\n]+', '', g, flags=re.M)
               gradle_kts.write_text(g, encoding='utf-8')
-              print('build.gradle.kts patched (Properties ambiguous fix)')
+              print('build.gradle.kts import removed (Properties ambiguous fix)')
           else:
               print('build.gradle.kts not found, skip')
           PY
