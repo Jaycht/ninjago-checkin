@@ -83,6 +83,21 @@ jobs:
               print('app label set to 九漫成长营')
           else:
               print('strings.xml not found, skip')
+
+          # ---- 修复 Tauri 2.x 生成的 build.gradle.kts 里 `import java.util.Properties`
+          #      与 Gradle Kotlin DSL 默认导入的 kotlin.properties.Properties 冲突(ambiguous)，
+          #      导致脚本编译失败 (Script compilation errors: Conflicting import 'Properties') ----
+          #      做法：删掉该 import 行，并把代码中裸 `Properties` 改为全限定 `java.util.Properties`
+          #      （保留 load/getProperty，且不影响 localProperties 这类标识符）。
+          gradle_kts = pathlib.Path('src-tauri/gen/android/app/build.gradle.kts')
+          if gradle_kts.exists():
+              g = gradle_kts.read_text(encoding='utf-8')
+              g = g.replace('import java.util.Properties\r\n', '').replace('import java.util.Properties\n', '')
+              g = re.sub(r'(?<![.\w])Properties', 'java.util.Properties', g)
+              gradle_kts.write_text(g, encoding='utf-8')
+              print('build.gradle.kts patched (Properties ambiguous fix)')
+          else:
+              print('build.gradle.kts not found, skip')
           PY
 
       - name: Setup Android release signing (debug keystore for sideload)
