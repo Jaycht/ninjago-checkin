@@ -428,9 +428,16 @@
   .stat-card .v{font-size:20px;font-weight:800;color:var(--gold);margin:2px 0}
   .stat-card .l{font-size:12px;color:var(--sub)}
   @media(max-width:430px){.statgrid{grid-template-columns:repeat(2,1fr)}}
+  #databanner{position:fixed;top:0;left:0;right:0;z-index:80;display:none;background:linear-gradient(90deg,#7a1f1f,#b5341f);color:#fff;font-size:12px;line-height:1.5;padding:9px 36px 9px 12px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+  #databanner.show{display:block}
+  #databanner b{color:#ffe08a}
+  #databanner .db-x{position:absolute;right:10px;top:8px;cursor:pointer;opacity:.85;font-size:14px}
+  #databanner .db-bk{margin-left:10px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:8px;padding:3px 10px;font-size:12px;cursor:pointer}
+  #databanner.show~.layout{margin-top:40px}
 </style>
 </head>
 <body>
+<div id="databanner"><span class="db-x">✕</span>📱 您正以「单文件」方式打开，<b>iPad/iPhone 上本地数据可能不被保存</b>。建议：① 定期在「家长中心 → 备份/恢复」复制备份码；② 或安装正式 APP。 <button class="db-bk" type="button">📋 去备份</button></div>
 <div id="bgfx" class="bgfx"></div>
 <div class="bgblur" id="bgblur"></div>
 <div class="layout">
@@ -1163,15 +1170,15 @@ const THEMES={
   conan:{name:'名侦探柯南',emoji:'🔍',bg:null,vars:{bg:'#0c1430',bg2:'#16204a',panel:'#1a2858',panel2:'#22337a',line:'#3a4fa8',txt:'#eef0ff',sub:'#aeb8e8',gold:'#e74c3c'}}
 };
 const THEME_MEDIA={
-  'ninja':{name:'幻影忍者',char:['assets/themes/幻影忍者/角色图/火·凯.jpg','assets/themes/幻影忍者/角色图/金·劳埃德.jpg','assets/themes/幻影忍者/角色图/水·妮雅.jpg','assets/themes/幻影忍者/角色图/雷·杰.jpg','assets/themes/幻影忍者/角色图/冰·赞.jpg','assets/themes/幻影忍者/角色图/土·寇.jpg']},
-  'frozen':{name:'冰雪奇缘',bg:['assets/themes/冰雪奇缘/背景图/1.jpg','assets/themes/冰雪奇缘/背景图/2.jpg','assets/themes/冰雪奇缘/背景图/3.jpg','assets/themes/冰雪奇缘/背景图/4.jpg','assets/themes/冰雪奇缘/背景图/5.jpg','assets/themes/冰雪奇缘/背景图/6.jpg'],char:['assets/themes/冰雪奇缘/角色图/艾莎.jpg','assets/themes/冰雪奇缘/角色图/克斯托夫.jpg','assets/themes/冰雪奇缘/角色图/安娜.jpg','assets/themes/冰雪奇缘/角色图/斯特.jpg','assets/themes/冰雪奇缘/角色图/汉斯.jpg','assets/themes/冰雪奇缘/角色图/雪宝.jpg']},
-  'paw':{name:'汪汪队',bg:['assets/themes/汪汪队/背景图/1.jpg','assets/themes/汪汪队/背景图/2.jpg','assets/themes/汪汪队/背景图/3.jpg','assets/themes/汪汪队/背景图/4.jpg','assets/themes/汪汪队/背景图/5‘’.jpg','assets/themes/汪汪队/背景图/6.jpg','assets/themes/汪汪队/背景图/7.jpg','assets/themes/汪汪队/背景图/8.jpg'],char:['assets/themes/汪汪队/角色图/莱德.jpg','assets/themes/汪汪队/角色图/天天.jpg','assets/themes/汪汪队/角色图/小砾.jpg','assets/themes/汪汪队/角色图/毛毛.jpg','assets/themes/汪汪队/角色图/灰灰.jpg','assets/themes/汪汪队/角色图/路马.jpg','assets/themes/汪汪队/角色图/阿奇.jpg']},
-  'chick':{name:'萌鸡小队',bg:['assets/themes/萌鸡小队/背景图/1.jpg','assets/themes/萌鸡小队/背景图/2.jpg','assets/themes/萌鸡小队/背景图/3.jpg','assets/themes/萌鸡小队/背景图/4.jpg','assets/themes/萌鸡小队/背景图/5.jpg','assets/themes/萌鸡小队/背景图/7.jpg','assets/themes/萌鸡小队/背景图/8.jpg','assets/themes/萌鸡小队/背景图/9.jpg'],char:['assets/themes/萌鸡小队/角色图/大宇.jpg','assets/themes/萌鸡小队/角色图/朵朵.jpg','assets/themes/萌鸡小队/角色图/欢欢.jpg','assets/themes/萌鸡小队/角色图/美佳.jpg','assets/themes/萌鸡小队/角色图/麦奇.jpg']},
-  'octo':{name:'海底小纵队',bg:['assets/themes/海底小纵队/背景图/1.png','assets/themes/海底小纵队/背景图/2.jpg','assets/themes/海底小纵队/背景图/3.jpg','assets/themes/海底小纵队/背景图/3.png','assets/themes/海底小纵队/背景图/4.jpg','assets/themes/海底小纵队/背景图/5.jpg','assets/themes/海底小纵队/背景图/6.jpg','assets/themes/海底小纵队/背景图/7.jpg','assets/themes/海底小纵队/背景图/8.jpg'],char:['assets/themes/海底小纵队/角色图/巴克队长.jpg','assets/themes/海底小纵队/角色图/呱唧.jpg','assets/themes/海底小纵队/角色图/小萝卜.jpg','assets/themes/海底小纵队/角色图/皮医生.jpg','assets/themes/海底小纵队/角色图/突突兔.jpg','assets/themes/海底小纵队/角色图/章教授.jpg','assets/themes/海底小纵队/角色图/谢灵通.jpg','assets/themes/海底小纵队/角色图/达西西.jpg']},
-  'conan':{name:'名侦探柯南',bg:['assets/themes/名侦探柯南/背景图/1.jpg','assets/themes/名侦探柯南/背景图/2.jpg','assets/themes/名侦探柯南/背景图/3.jpg','assets/themes/名侦探柯南/背景图/4.jpg','assets/themes/名侦探柯南/背景图/5.jpg','assets/themes/名侦探柯南/背景图/6.jpg','assets/themes/名侦探柯南/背景图/7.jpg','assets/themes/名侦探柯南/背景图/8.jpg'],char:['assets/themes/名侦探柯南/角色图/柯南.jpg','assets/themes/名侦探柯南/角色图/吉田步美.jpg','assets/themes/名侦探柯南/角色图/工藤新一.jpg','assets/themes/名侦探柯南/角色图/怪盗基德.jpg','assets/themes/名侦探柯南/角色图/毛利兰.jpg','assets/themes/名侦探柯南/角色图/毛利小五郎.jpg','assets/themes/名侦探柯南/角色图/灰原哀.jpg','assets/themes/名侦探柯南/角色图/铃木园子.jpg']},
-  'wave':{name:'哈小浪',bg:['assets/themes/哈小浪/背景图/1.jpg','assets/themes/哈小浪/背景图/2.jpg','assets/themes/哈小浪/背景图/3.jpg','assets/themes/哈小浪/背景图/4.jpg','assets/themes/哈小浪/背景图/5.jpg'],char:['assets/themes/哈小浪/角色图/哈小浪.jpg','assets/themes/哈小浪/角色图/处小刀.jpg','assets/themes/哈小浪/角色图/摩小木.jpg','assets/themes/哈小浪/角色图/柯小瓶.jpg','assets/themes/哈小浪/角色图/毛暖暖.jpg','assets/themes/哈小浪/角色图/羊白白.jpg','assets/themes/哈小浪/角色图/茉鱼儿.jpg','assets/themes/哈小浪/角色图/蝎小黑.jpg']},
-  'pony':{name:'小马宝莉',bg:['assets/themes/小马宝莉/背景图/1.jpg','assets/themes/小马宝莉/背景图/10.jpg','assets/themes/小马宝莉/背景图/11.jpg','assets/themes/小马宝莉/背景图/12.jpg','assets/themes/小马宝莉/背景图/12.png','assets/themes/小马宝莉/背景图/13.jpg','assets/themes/小马宝莉/背景图/13.png','assets/themes/小马宝莉/背景图/2.jpg','assets/themes/小马宝莉/背景图/3.jpg','assets/themes/小马宝莉/背景图/4.jpg','assets/themes/小马宝莉/背景图/5.jpg','assets/themes/小马宝莉/背景图/5.png','assets/themes/小马宝莉/背景图/6.jpg'],char:['assets/themes/小马宝莉/角色图/紫悦.png','assets/themes/小马宝莉/角色图/云宝.png','assets/themes/小马宝莉/角色图/提亚拉.png','assets/themes/小马宝莉/角色图/柔柔.png','assets/themes/小马宝莉/角色图/珍奇.png','assets/themes/小马宝莉/角色图/碧琪.png','assets/themes/小马宝莉/角色图/穗龙.png','assets/themes/小马宝莉/角色图/苹果嘉儿.png']},
-  'magic':{name:'巴拉巴拉小魔仙',bg:['assets/themes/巴拉巴拉小魔仙/背景图/1.jpg','assets/themes/巴拉巴拉小魔仙/背景图/11.jpg','assets/themes/巴拉巴拉小魔仙/背景图/12.jpg','assets/themes/巴拉巴拉小魔仙/背景图/13.jpg','assets/themes/巴拉巴拉小魔仙/背景图/16.jpg','assets/themes/巴拉巴拉小魔仙/背景图/17.jpg','assets/themes/巴拉巴拉小魔仙/背景图/2.jpg','assets/themes/巴拉巴拉小魔仙/背景图/3.jpg','assets/themes/巴拉巴拉小魔仙/背景图/4.jpg','assets/themes/巴拉巴拉小魔仙/背景图/5.jpg','assets/themes/巴拉巴拉小魔仙/背景图/6.jpg','assets/themes/巴拉巴拉小魔仙/背景图/8.jpg'],char:['assets/themes/巴拉巴拉小魔仙/角色图/凌美雪.jpg','assets/themes/巴拉巴拉小魔仙/角色图/严莉莉.jpg','assets/themes/巴拉巴拉小魔仙/角色图/二公主贝贝.jpg','assets/themes/巴拉巴拉小魔仙/角色图/公主娜希雅.jpg','assets/themes/巴拉巴拉小魔仙/角色图/公主彩例.jpg','assets/themes/巴拉巴拉小魔仙/角色图/凌海昕.jpg','assets/themes/巴拉巴拉小魔仙/角色图/凌美琪.jpg','assets/themes/巴拉巴拉小魔仙/角色图/小千.jpg','assets/themes/巴拉巴拉小魔仙/角色图/小蓝.jpg','assets/themes/巴拉巴拉小魔仙/角色图/施巧灵.jpg','assets/themes/巴拉巴拉小魔仙/角色图/殷小敏.jpg','assets/themes/巴拉巴拉小魔仙/角色图/蓝慧.jpg']}
+  'ninja':{name:'幻影忍者',char:['assets/themes/幻影忍者/角色图/火·凯.webp','assets/themes/幻影忍者/角色图/金·劳埃德.webp','assets/themes/幻影忍者/角色图/水·妮雅.webp','assets/themes/幻影忍者/角色图/雷·杰.webp','assets/themes/幻影忍者/角色图/冰·赞.webp','assets/themes/幻影忍者/角色图/土·寇.webp']},
+  'frozen':{name:'冰雪奇缘',bg:['assets/themes/冰雪奇缘/背景图/1.webp','assets/themes/冰雪奇缘/背景图/2.webp','assets/themes/冰雪奇缘/背景图/3.webp','assets/themes/冰雪奇缘/背景图/4.webp','assets/themes/冰雪奇缘/背景图/5.webp','assets/themes/冰雪奇缘/背景图/6.webp'],char:['assets/themes/冰雪奇缘/角色图/艾莎.webp','assets/themes/冰雪奇缘/角色图/克斯托夫.webp','assets/themes/冰雪奇缘/角色图/安娜.webp','assets/themes/冰雪奇缘/角色图/斯特.webp','assets/themes/冰雪奇缘/角色图/汉斯.webp','assets/themes/冰雪奇缘/角色图/雪宝.webp']},
+  'paw':{name:'汪汪队',bg:['assets/themes/汪汪队/背景图/1.webp','assets/themes/汪汪队/背景图/2.webp','assets/themes/汪汪队/背景图/3.webp','assets/themes/汪汪队/背景图/4.webp','assets/themes/汪汪队/背景图/5‘’.webp','assets/themes/汪汪队/背景图/6.webp','assets/themes/汪汪队/背景图/7.webp','assets/themes/汪汪队/背景图/8.webp'],char:['assets/themes/汪汪队/角色图/莱德.webp','assets/themes/汪汪队/角色图/天天.webp','assets/themes/汪汪队/角色图/小砾.webp','assets/themes/汪汪队/角色图/毛毛.webp','assets/themes/汪汪队/角色图/灰灰.webp','assets/themes/汪汪队/角色图/路马.webp','assets/themes/汪汪队/角色图/阿奇.webp']},
+  'chick':{name:'萌鸡小队',bg:['assets/themes/萌鸡小队/背景图/1.webp','assets/themes/萌鸡小队/背景图/2.webp','assets/themes/萌鸡小队/背景图/3.webp','assets/themes/萌鸡小队/背景图/4.webp','assets/themes/萌鸡小队/背景图/5.webp','assets/themes/萌鸡小队/背景图/7.webp','assets/themes/萌鸡小队/背景图/8.webp','assets/themes/萌鸡小队/背景图/9.webp'],char:['assets/themes/萌鸡小队/角色图/大宇.webp','assets/themes/萌鸡小队/角色图/朵朵.webp','assets/themes/萌鸡小队/角色图/欢欢.webp','assets/themes/萌鸡小队/角色图/美佳.webp','assets/themes/萌鸡小队/角色图/麦奇.webp']},
+  'octo':{name:'海底小纵队',bg:['assets/themes/海底小纵队/背景图/1.webp','assets/themes/海底小纵队/背景图/2.webp','assets/themes/海底小纵队/背景图/3.webp','assets/themes/海底小纵队/背景图/3.webp','assets/themes/海底小纵队/背景图/4.webp','assets/themes/海底小纵队/背景图/5.webp','assets/themes/海底小纵队/背景图/6.webp','assets/themes/海底小纵队/背景图/7.webp','assets/themes/海底小纵队/背景图/8.webp'],char:['assets/themes/海底小纵队/角色图/巴克队长.webp','assets/themes/海底小纵队/角色图/呱唧.webp','assets/themes/海底小纵队/角色图/小萝卜.webp','assets/themes/海底小纵队/角色图/皮医生.webp','assets/themes/海底小纵队/角色图/突突兔.webp','assets/themes/海底小纵队/角色图/章教授.webp','assets/themes/海底小纵队/角色图/谢灵通.webp','assets/themes/海底小纵队/角色图/达西西.webp']},
+  'conan':{name:'名侦探柯南',bg:['assets/themes/名侦探柯南/背景图/1.webp','assets/themes/名侦探柯南/背景图/2.webp','assets/themes/名侦探柯南/背景图/3.webp','assets/themes/名侦探柯南/背景图/4.webp','assets/themes/名侦探柯南/背景图/5.webp','assets/themes/名侦探柯南/背景图/6.webp','assets/themes/名侦探柯南/背景图/7.webp','assets/themes/名侦探柯南/背景图/8.webp'],char:['assets/themes/名侦探柯南/角色图/柯南.webp','assets/themes/名侦探柯南/角色图/吉田步美.webp','assets/themes/名侦探柯南/角色图/工藤新一.webp','assets/themes/名侦探柯南/角色图/怪盗基德.webp','assets/themes/名侦探柯南/角色图/毛利兰.webp','assets/themes/名侦探柯南/角色图/毛利小五郎.webp','assets/themes/名侦探柯南/角色图/灰原哀.webp','assets/themes/名侦探柯南/角色图/铃木园子.webp']},
+  'wave':{name:'哈小浪',bg:['assets/themes/哈小浪/背景图/1.webp','assets/themes/哈小浪/背景图/2.webp','assets/themes/哈小浪/背景图/3.webp','assets/themes/哈小浪/背景图/4.webp','assets/themes/哈小浪/背景图/5.webp'],char:['assets/themes/哈小浪/角色图/哈小浪.webp','assets/themes/哈小浪/角色图/处小刀.webp','assets/themes/哈小浪/角色图/摩小木.webp','assets/themes/哈小浪/角色图/柯小瓶.webp','assets/themes/哈小浪/角色图/毛暖暖.webp','assets/themes/哈小浪/角色图/羊白白.webp','assets/themes/哈小浪/角色图/茉鱼儿.webp','assets/themes/哈小浪/角色图/蝎小黑.webp']},
+  'pony':{name:'小马宝莉',bg:['assets/themes/小马宝莉/背景图/1.webp','assets/themes/小马宝莉/背景图/10.webp','assets/themes/小马宝莉/背景图/11.webp','assets/themes/小马宝莉/背景图/12.webp','assets/themes/小马宝莉/背景图/12.webp','assets/themes/小马宝莉/背景图/13.webp','assets/themes/小马宝莉/背景图/13.webp','assets/themes/小马宝莉/背景图/2.webp','assets/themes/小马宝莉/背景图/3.webp','assets/themes/小马宝莉/背景图/4.webp','assets/themes/小马宝莉/背景图/5.webp','assets/themes/小马宝莉/背景图/5.webp','assets/themes/小马宝莉/背景图/6.webp'],char:['assets/themes/小马宝莉/角色图/紫悦.webp','assets/themes/小马宝莉/角色图/云宝.webp','assets/themes/小马宝莉/角色图/提亚拉.webp','assets/themes/小马宝莉/角色图/柔柔.webp','assets/themes/小马宝莉/角色图/珍奇.webp','assets/themes/小马宝莉/角色图/碧琪.webp','assets/themes/小马宝莉/角色图/穗龙.webp','assets/themes/小马宝莉/角色图/苹果嘉儿.webp']},
+  'magic':{name:'巴拉巴拉小魔仙',bg:['assets/themes/巴拉巴拉小魔仙/背景图/1.webp','assets/themes/巴拉巴拉小魔仙/背景图/11.webp','assets/themes/巴拉巴拉小魔仙/背景图/12.webp','assets/themes/巴拉巴拉小魔仙/背景图/13.webp','assets/themes/巴拉巴拉小魔仙/背景图/16.webp','assets/themes/巴拉巴拉小魔仙/背景图/17.webp','assets/themes/巴拉巴拉小魔仙/背景图/2.webp','assets/themes/巴拉巴拉小魔仙/背景图/3.webp','assets/themes/巴拉巴拉小魔仙/背景图/4.webp','assets/themes/巴拉巴拉小魔仙/背景图/5.webp','assets/themes/巴拉巴拉小魔仙/背景图/6.webp','assets/themes/巴拉巴拉小魔仙/背景图/8.webp'],char:['assets/themes/巴拉巴拉小魔仙/角色图/凌美雪.webp','assets/themes/巴拉巴拉小魔仙/角色图/严莉莉.webp','assets/themes/巴拉巴拉小魔仙/角色图/二公主贝贝.webp','assets/themes/巴拉巴拉小魔仙/角色图/公主娜希雅.webp','assets/themes/巴拉巴拉小魔仙/角色图/公主彩例.webp','assets/themes/巴拉巴拉小魔仙/角色图/凌海昕.webp','assets/themes/巴拉巴拉小魔仙/角色图/凌美琪.webp','assets/themes/巴拉巴拉小魔仙/角色图/小千.webp','assets/themes/巴拉巴拉小魔仙/角色图/小蓝.webp','assets/themes/巴拉巴拉小魔仙/角色图/施巧灵.webp','assets/themes/巴拉巴拉小魔仙/角色图/殷小敏.webp','assets/themes/巴拉巴拉小魔仙/角色图/蓝慧.webp']}
 };
 function applyTheme(resetBg){
   const t=THEMES[S.settings.theme]||THEMES.ninja;
@@ -1203,7 +1210,32 @@ function defaultState(){
   };
 }
 
-/* ============ 读写 ============ */
+/* ============ 读写（localStorage + IndexedDB 镜像兜底） ============ */
+const IDB_NAME='nj_checkin_idb',IDB_STORE='kv';
+function _idbOpen(cb){
+  try{ if(!window.indexedDB){cb(null);return;} const req=indexedDB.open(IDB_NAME,1);
+    req.onupgradeneeded=()=>{try{req.result.createObjectStore(IDB_STORE);}catch(e){}};
+    req.onsuccess=()=>cb(req.result); req.onerror=()=>cb(null);
+  }catch(e){cb(null);}
+}
+function idbSave(val){
+  _idbOpen(db=>{ if(!db)return; try{ const tx=db.transaction(IDB_STORE,'readwrite');
+    tx.objectStore(IDB_STORE).put(val,LS_KEY); tx.onerror=()=>{}; }catch(e){} });
+}
+function idbLoad(cb){
+  _idbOpen(db=>{ if(!db){cb(null);return;} try{ const tx=db.transaction(IDB_STORE,'readonly');
+    const g=tx.objectStore(IDB_STORE).get(LS_KEY);
+    g.onsuccess=()=>cb(g.result||null); g.onerror=()=>cb(null); }catch(e){cb(null);} });
+}
+function idbRestore(){
+  idbLoad(raw=>{ if(!raw)return; try{
+    let hasCur=false; try{const c=localStorage.getItem(LS_KEY);hasCur=!!(c&&c.length>2);}catch(e){}
+    if(hasCur)return; /* localStorage 有数据则不覆盖 */
+    S=JSON.parse(raw);migrate();
+    if(!S.profile||!S.profile.name)UI.onboard=true;
+    save();render();
+  }catch(e){} });
+}
 function load(){
   try{const r=localStorage.getItem(LS_KEY);if(r){S=JSON.parse(r);migrate();}}catch(e){console.warn(e);}
   if(!S)S=defaultState();
@@ -1230,7 +1262,14 @@ function migrate(){
   S.profile.avatar=S.profile.avatar||'';S.profile.school=S.profile.school||'';S.profile.cls=S.profile.cls||'';S.profile.age=S.profile.age||'';
   S.log=S.log||[];S.medals=S.medals||[];S.boss=S.boss||null;S.daily=S.daily||{};S.bossLog=S.bossLog||[];S.studyDone=S.studyDone||{};S.wordDone=S.wordDone||{};S.reciteDone=S.reciteDone||{};
 }
-function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){toast('保存失败：存储空间不足');}}
+function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(S));}catch(e){toast('保存失败：存储空间不足');}
+  idbSave(JSON.stringify(S)); /* 镜像到 IndexedDB：file:// 等 localStorage 不可靠场景的兜底 */}
+function showDataBanner(){
+  const b=document.getElementById('databanner');if(!b)return;
+  b.classList.add('show');
+  const x=b.querySelector('.db-x');if(x)x.onclick=()=>b.classList.remove('show');
+  const bk=b.querySelector('.db-bk');if(bk)bk.onclick=()=>{b.classList.remove('show');openModal(modalBackup());bindBackup();};
+}
 
 /* ============ 日志 ============ */
 function addLog(text,type){S.log=S.log||[];S.log.unshift({d:todayStr(),t:text,type:type||'info'});if(S.log.length>300)S.log.length=300;}
@@ -2522,9 +2561,10 @@ function modalAbout(){
     ['v6.1.0','2026-08-01','全站新增「返回学院主页」按钮：每个二级/三级页面与所有弹窗(添加任务/添加奖励/设置/备份恢复/清空数据/我的信息/家长验证/背诵详情等)均可在任意层级一键回到学院主页；版本号同步迭代至 6.1.0。'],
     ['v6.2.0','2026-08-01','将"关于/版本日志/版权声明"从任务管理底部移出，在家长中心独立成「关于 & 版权声明」专区；版本号同步迭代至 6.2.0。'],
     ['v6.3.0','2026-08-01','离线TTS兜底增强(方案D)：预生成并随App打包230个英语单词+28段古诗文/课文音频(约3.9MB)，断网也能听常用发音；修复仅幻影忍者主题背景轮播(现所有动画主题均轮播自有背景图)；英语点读页新增"无声请开网络"提示。'],
-    ['v6.4.0','2026-08-01','将关于和版权声明/版本日志从家长中心底部卡片改为顶部独立按钮(设置之后、备份恢复之前)弹窗展现；家长验证弹窗补回初始默认密码1234提示；版本号同步迭代至6.4.0。']];
+    ['v6.4.0','2026-08-01','将关于和版权声明/版本日志从家长中心底部卡片改为顶部独立按钮(设置之后、备份恢复之前)弹窗展现；家长验证弹窗补回初始默认密码1234提示；版本号同步迭代至6.4.0。'],
+    ['v6.5.0','2026-08-01','主题背景图与角色图全面压缩为 WebP(约36MB→4.8MB，APK 安装包显著减小)；新增 iPad/iPhone 数据保存兜底(localStorage 不可靠时自动用 IndexedDB 镜像恢复，并以横幅提示用户备份/安装 APP)；同步发布独立的「单文件版 HTML」(内联全部压缩图、仅在线发音、去掉自拍摄像头，体积约9.7MB)。版本号同步迭代至6.5.0。']];
   h+='<h3 class="about-sub">📌 版本日志（'+VLOG.length+' 个版本）</h3><div class="vlog">'+VLOG.map(r=>'<div class="vrow"><div class="vh"><b>'+r[0]+'</b><span>'+r[1]+'</span></div><p>'+r[2]+'</p></div>').join('')+'</div>';
-  h+='<div class="cp">当前版本：v6.4.0</div><div class="cp">Copyright © 2026 陈洪涛. 保留所有权利。</div><div class="cp">© 2026 陈洪涛 版权所有 · 本软件仅供个人家庭学习使用。</div></div>';
+  h+='<div class="cp">当前版本：v6.5.0</div><div class="cp">Copyright © 2026 陈洪涛. 保留所有权利。</div><div class="cp">© 2026 陈洪涛 版权所有 · 本软件仅供个人家庭学习使用。</div></div>';
 
 
   return h;
@@ -3389,6 +3429,7 @@ function start(){
   const bl=document.getElementById('brandlogo');if(bl)bl.innerHTML='<img src="'+IMG.logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:8px">';
   applyTheme(true);
   bindGlobal();render();
+  if(location.protocol==='file:'){ showDataBanner(); idbRestore(); }
 }
 start();
 </script>
