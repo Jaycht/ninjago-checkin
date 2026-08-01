@@ -71,7 +71,7 @@ jobs:
               if t2 == t:
                   t2 = re.sub(r'(<activity\b)', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
               manifest.write_text(t2, encoding='utf-8')
-              print('AndroidManifest patched (INTERNET + CAMERA + sensor orientation)')
+              print('AndroidManifest patched (INTERNET + sensor orientation)')
           else:
               print('AndroidManifest not found, skip')
 
