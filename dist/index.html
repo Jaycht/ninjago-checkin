@@ -29,8 +29,8 @@
   /* Sidebar */
   .sidebar{
     width:228px;flex:0 0 228px;background:linear-gradient(180deg,#101c40,#0c1430);
-    border-right:1px solid var(--line);padding:14px 10px;position:sticky;top:0;height:100vh;
-    display:flex;flex-direction:column;gap:4px;z-index:40;
+    border-right:1px solid var(--line);padding:calc(14px + env(safe-area-inset-top,0px)) 10px 14px;position:sticky;top:0;height:100vh;
+    display:flex;flex-direction:column;gap:4px;z-index:40;overflow-y:auto;overscroll-behavior:contain;
   }
   .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
   .who .sub{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -55,7 +55,7 @@
   .pf-av-actions .btn{cursor:pointer}
   /* Main */
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
-  .topwrap{position:sticky;top:0;z-index:30}
+  .topwrap{position:sticky;top:0;z-index:30;padding-top:env(safe-area-inset-top,0px)}
   .topbar{display:flex;align-items:center;gap:10px;padding:9px 14px;
     background:linear-gradient(180deg,rgba(16,28,64,.96),rgba(14,23,51,.9));border-bottom:1px solid var(--line)}
   .app-title{font-weight:900;font-size:clamp(14px,4.2vw,17px);color:#fff;display:flex;align-items:center;gap:8px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -171,9 +171,10 @@
   .empty{padding:22px;text-align:center;color:var(--sub);font-size:13px}
   /* mobile */
   @media(max-width:820px){
-    .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);z-index:40}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;height:auto;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);z-index:40;overflow-y:auto;overscroll-behavior:contain;padding-top:max(calc(14px + env(safe-area-inset-top,0px)),38px)}
     .sidebar.open{transform:translateX(0)}
     .hamb{display:block}
+    .topwrap{padding-top:max(env(safe-area-inset-top,0px),24px)}
     .wrap{padding:14px 12px 40px}
     .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
   }
@@ -343,6 +344,12 @@
   .bgfx .bg-item{position:absolute;top:-14vh;opacity:.12;animation:drift linear infinite}
   @keyframes drift{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(128vh) rotate(360deg)}}
   .layout{position:relative;z-index:1}
+  /* 非首页背景模糊层（提升阅读体验，首页不模糊） */
+  .bgblur{position:fixed;inset:0;z-index:0;pointer-events:none;display:none;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(6,10,24,.5)}
+  body:not(.home) .bgblur{display:block}
+  /* 侧边栏打开时锁定页面滚动，避免滑动穿透 */
+  body.sidebar-open{overflow:hidden}
   /* —— 品牌LOGO —— */
   .logo{width:42px;height:42px;flex:0 0 42px}
   .logo img{width:100%;height:100%;display:block;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));border-radius:8px}
@@ -358,6 +365,7 @@
 </head>
 <body>
 <div id="bgfx" class="bgfx"></div>
+<div class="bgblur" id="bgblur"></div>
 <div class="layout">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
@@ -1273,6 +1281,7 @@ function doReset(){
 
 /* ============ 渲染 ============ */
 function render(){
+  document.body.classList.toggle('home', UI.view==='home');
   renderNav();renderHUD();renderMode();
   const app=$('#app');
   if(UI.onboard){app.innerHTML=onboardHTML();bindOnboard();return;}
@@ -1347,36 +1356,56 @@ function renderMode(){
 const RECITE={weeks:[
  {name:'第一周',levels:[
    {id:'w1-1',name:'第1关',unit:'第一单元',title:'第1课《观潮》3-4自然段',text:'那条白线很快地向我们移来，逐渐拉长，变粗，横贯江面。再近些，只见白浪翻滚，形成一堵两丈多高的水墙。浪潮越来越近，犹如千万匹白色战马齐头并进，浩浩荡荡地飞奔而来；那声音如同山崩地裂，好像大地都被震得颤动起来。\n\n霎时，潮头奔腾西去，可是余波还在漫天卷地般涌来，江面上依旧风号浪吼。过了好久，钱塘江才恢复了平静。看看堤下，江水已经涨了两丈来高了。'},
-   {id:'w1-2',name:'第2关',unit:'第一单元',title:'语文园地一《赠刘景文》',text:'荷尽已无擎雨盖，菊残犹有傲霜枝。一年好景君须记，最是橙黄橘绿时。'},
+   {id:'w1-2',name:'第2关',unit:'第一单元',title:'语文园地一《赠刘景文》',text:'荷尽已无擎雨盖，菊残犹有傲霜枝。一年好景君须记，最是橙黄橘绿时。',
+    zh:'荷花凋谢，连那托住雨水的荷叶也枯萎了；只有那开败的菊花的花枝，还傲寒斗霜。一年中最好的景致你一定要记住，那就是橙子金黄、橘子青绿的秋末冬初时节。',
+    words:[['荷尽','荷花凋谢'],['擎雨盖','托住雨水的荷叶，像一把撑开的伞'],['菊残','菊花凋残'],['傲霜','不怕寒霜，在霜中挺立'],['君','你'],['橙黄橘绿','指秋末冬初橙子黄、橘子绿的时候']]},
    {id:'w1-3',name:'第3关',unit:'第二单元',title:'语文园地二 关于勤学好问的名言',text:'好问则裕，自用则小。——《尚书》\n博学之，审问之，慎思之，明辨之，笃行之。——《礼记》\n智能之士，不学不成，不问不知。——王充\n人非生而知之者，孰能无惑？——韩愈'},
    {id:'w1-z',name:'智慧关',unit:'《论语》',title:'第1页：学而时习之',text:'子曰：“学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？”'}
  ]},
  {name:'第二周',levels:[
-   {id:'w2-4',name:'第4关',unit:'第三单元',title:'第8课古诗三首《暮江吟》',text:'一道残阳铺水中，半江瑟瑟半江红。可怜九月初三夜，露似真珠月似弓。'},
-   {id:'w2-5',name:'第5关',unit:'第三单元',title:'第8课古诗三首《题西林壁》',text:'横看成岭侧成峰，远近高低各不同。不识庐山真面目，只缘身在此山中。'},
-   {id:'w2-6',name:'第6关',unit:'第三单元',title:'第8课古诗三首《雪梅》',text:'梅雪争春未肯降，骚人阁笔费评章。梅须逊雪三分白，雪却输梅一段香。'},
+   {id:'w2-4',name:'第4关',unit:'第三单元',title:'第8课古诗三首《暮江吟》',text:'一道残阳铺水中，半江瑟瑟半江红。可怜九月初三夜，露似真珠月似弓。',
+    zh:'夕阳的余晖铺洒在江面上，江水一半碧绿一半艳红。最可爱的是九月初三的夜晚，露水像珍珠一样晶莹，一弯新月像一张弯弓。',
+    words:[['残阳','夕阳'],['瑟瑟','这里指碧绿的颜色'],['可怜','可爱'],['真珠','珍珠'],['月似弓','一弯新月像弯弓']]},
+   {id:'w2-5',name:'第5关',unit:'第三单元',title:'第8课古诗三首《题西林壁》',text:'横看成岭侧成峰，远近高低各不同。不识庐山真面目，只缘身在此山中。',
+    zh:'从正面看、从侧面看，庐山山岭连绵、山峰耸立；从远处、近处、高处、低处看，庐山千姿百态各不相同。之所以认不清庐山真正的面目，是因为自己就身处这座山中。',
+    words:[['题','书写，题写'],['西林壁','庐山西林寺的墙壁'],['横看','从正面看'],['缘','因为'],['此山','指庐山']]},
+   {id:'w2-6',name:'第6关',unit:'第三单元',title:'第8课古诗三首《雪梅》',text:'梅雪争春未肯降，骚人阁笔费评章。梅须逊雪三分白，雪却输梅一段香。',
+    zh:'梅花和雪花都争着报春，不肯认输，诗人放下笔也难以评判高下。梅花比雪少三分洁白，雪却输给梅花一段清香。',
+    words:[['降','服输，认输'],['骚人','诗人'],['阁笔','放下笔（阁，同「搁」）'],['评章','评议，评判'],['逊','不及，比不上'],['输','输给，不如']]},
    {id:'w2-z',name:'智慧关',unit:'《论语》',title:'第3页：其为人也孝弟',text:'子曰：“其为人也孝弟，而好犯上者，鲜矣；不好犯上，而好作乱者，未之有也。君子务本，本立而道生。孝弟也者，其为仁之本与！”'}
  ]},
  {name:'第三周',levels:[
    {id:'w3-7',name:'第7关',unit:'第三单元',title:'语文园地三 和秋天有关的气象谚语',text:'立了秋，把扇丢。\n二八月，乱穿衣。\n夏雨少，秋霜早。\n八月里来雁门开，雁儿脚上带霜来。\n一场秋雨一场寒，十场秋雨要穿棉。\n八月暖，九月温，十月还有小阳春。'},
    {id:'w3-8',name:'第8关',unit:'第四单元',title:'第12课《精卫填海》',text:'炎帝之少女，名曰女娃。女娃游于东海，溺而不返，故为精卫，常衔西山之木石，以堙于东海。'},
-   {id:'w3-9',name:'第9关',unit:'第四单元',title:'语文园地四《嫦娥》',text:'云母屏风烛影深，长河渐落晓星沉。嫦娥应悔偷灵药，碧海青天夜夜心。'},
+   {id:'w3-9',name:'第9关',unit:'第四单元',title:'语文园地四《嫦娥》',text:'云母屏风烛影深，长河渐落晓星沉。嫦娥应悔偷灵药，碧海青天夜夜心。',
+    zh:'云母屏风上烛影暗淡，银河渐渐西落，晨星也隐没。嫦娥应当后悔偷吃了不死灵药，如今面对碧海青天，夜夜孤寂伤心。',
+    words:[['云母屏风','用云母石装饰的屏风'],['长河','银河'],['晓星','晨星'],['嫦娥','神话中偷吃不死药飞上月宫的仙女'],['灵药','长生不老的药'],['碧海青天','指蓝天碧海，形容孤寂冷清']]},
    {id:'w3-z',name:'智慧关',unit:'《论语》',title:'第5页：巧言令色，鲜矣仁',text:'子曰：“巧言令色，鲜矣仁。”'}
  ]},
  {name:'第四周',levels:[
-   {id:'w4-10',name:'第10关',unit:'第六单元',title:'语文园地六《黄鹤楼送孟浩然之广陵》',text:'故人西辞黄鹤楼，烟花三月下扬州。孤帆远影碧空尽，唯见长江天际流。'},
+   {id:'w4-10',name:'第10关',unit:'第六单元',title:'语文园地六《黄鹤楼送孟浩然之广陵》',text:'故人西辞黄鹤楼，烟花三月下扬州。孤帆远影碧空尽，唯见长江天际流。',
+    zh:'老朋友在黄鹤楼向我辞别，在繁花如烟的三月顺流而下前往扬州。孤船的帆影渐渐远去，消失在碧空的尽头，只看见长江向天边奔流。',
+    words:[['故人','老朋友，指孟浩然'],['辞','告别，辞别'],['烟花','繁花盛开，如烟如雾'],['下','顺流而下'],['唯见','只看见'],['天际','天边']]},
    {id:'w4-11',name:'第11关',unit:'第七单元',title:'第23课《王戎不取道旁李》',text:'王戎七岁，尝与诸小儿游。看道边李树多子折枝，诸儿竞走取之，唯戎不动。人问之，答曰：“树在道边而多子，此必苦李。”取之，信然。'},
    {id:'w4-12',name:'第12关',unit:'第七单元',title:'语文园地七 八字成语',text:'尺有所短，寸有所长。\n机不可失，时不再来。\n差之毫厘，谬以千里。\n病从口入，祸从口出。\n一言既出，驷马难追。\n比上不足，比下有余。'},
    {id:'w4-z',name:'智慧关',unit:'《论语》',title:'第7页：过则勿惮改',text:'子曰：“君子不重，则不威；学则不固。主忠信，无友不如己者。过则勿惮改。”'}
  ]},
  {name:'第五周',levels:[
-   {id:'w5-13',name:'第13关',unit:'第八单元',title:'第27课古诗三首《凉州词》',text:'葡萄美酒夜光杯，欲饮琵琶马上催。醉卧沙场君莫笑，古来征战几人回？'},
-   {id:'w5-14',name:'第14关',unit:'第八单元',title:'第27课古诗三首《出塞》',text:'秦时明月汉时关，万里长征人未还。但使龙城飞将在，不教胡马度阴山。'},
-   {id:'w5-15',name:'第15关',unit:'第八单元',title:'第27课古诗三首《夏日绝句》',text:'生当作人杰，死亦为鬼雄。至今思项羽，不肯过江东。'},
+   {id:'w5-13',name:'第13关',unit:'第八单元',title:'第27课古诗三首《凉州词》',text:'葡萄美酒夜光杯，欲饮琵琶马上催。醉卧沙场君莫笑，古来征战几人回？',
+    zh:'葡萄美酒盛在夜光杯里，正要举杯痛饮，琵琶声却在催人出征。即使醉卧在沙场上也请你不要笑话，从古至今出征作战能有几人活着回还？',
+    words:[['夜光杯','用白玉制成的酒杯，夜间会发光'],['欲饮','正要喝酒'],['催','催促（出征）'],['沙场','战场'],['古来','自古以来']]},
+   {id:'w5-14',name:'第14关',unit:'第八单元',title:'第27课古诗三首《出塞》',text:'秦时明月汉时关，万里长征人未还。但使龙城飞将在，不教胡马度阴山。',
+    zh:'依旧是秦汉时的明月和边关，远征万里的将士至今仍未回还。要是龙城的飞将军李广还在，绝不会让匈奴的骑兵越过阴山。',
+    words:[['但使','只要'],['龙城飞将','指汉代名将李广，人称「飞将军」'],['不教','不让，不许'],['胡马','指匈奴的骑兵'],['度','越过'],['阴山','北方山脉，古代抵御匈奴的屏障']]},
+   {id:'w5-15',name:'第15关',unit:'第八单元',title:'第27课古诗三首《夏日绝句》',text:'生当作人杰，死亦为鬼雄。至今思项羽，不肯过江东。',
+    zh:'活着应当做人中的豪杰，死了也要做鬼中的英雄。到今天人们还在思念项羽，只因他不肯苟且偷生、退回江东。',
+    words:[['人杰','人中的豪杰'],['鬼雄','鬼中的英雄'],['项羽','秦末起义领袖，兵败后自刎乌江'],['江东','长江下游地区，项羽起兵的地方'],['过','渡过']]},
    {id:'w5-z',name:'智慧关',unit:'《论语》',title:'第9页：三十而立，四十而不惑',text:'子曰：“吾十有五而志于学，三十而立，四十而不惑，五十而知天命，六十而耳顺，七十而从心所欲，不逾矩。”'}
  ]},
  {name:'第六周',levels:[
-   {id:'w6-16',name:'第16关',unit:'第八单元',title:'语文园地八《别董大》',text:'千里黄云白日曛，北风吹雁雪纷纷。莫愁前路无知己，天下谁人不识君。'},
+   {id:'w6-16',name:'第16关',unit:'第八单元',title:'语文园地八《别董大》',text:'千里黄云白日曛，北风吹雁雪纷纷。莫愁前路无知己，天下谁人不识君。',
+    zh:'千里黄云遮蔽白日，天色昏暗，北风吹送大雁，大雪纷纷扬扬。不要忧愁前面没有知心朋友，天下哪个人不认识您呢？',
+    words:[['曛','昏暗'],['莫愁','不要忧愁'],['知己','知心朋友'],['君','指董大，唐代琴师董庭兰']]},
    {id:'w6-z1',name:'智慧关',unit:'《论语》',title:'第12页：学而不思则罔',text:'子曰：“学而不思则罔，思而不学则殆。”'},
    {id:'w6-z2',name:'智慧关',unit:'《论语》',title:'第15页：君子周而不比',text:'子曰：“君子周而不比，小人比而不周。”'}
  ]}
@@ -1416,9 +1445,13 @@ function openRecite(id){
   let lv=null;RECITE.weeks.forEach(wk=>wk.levels.forEach(l=>{if(l.id===id)lv=l;}));
   if(!lv)return;
   const done=!!S.reciteDone[id];
+  let notes='';
+  if(lv.zh)notes+='<div class="note"><b>📖 诗意·注释：</b><br>'+esc(lv.zh)+'</div>';
+  if(lv.words&&lv.words.length)notes+='<div class="note"><b>🔍 重点字词：</b><br>'+lv.words.map(w=>'<b>'+esc(w[0])+'</b>　'+esc(w[1])).join('<br>')+'</div>';
   const html='<h3>'+esc(lv.name)+' · '+esc(lv.title)+'</h3>'+
     '<div class="muted" style="margin-bottom:6px">'+esc(lv.unit)+'</div>'+
     '<div class="poem" style="font-size:16px;line-height:2;white-space:pre-wrap">'+esc(lv.text)+'</div>'+
+    notes+
     '<div class="modal-actions">'+
     '<button class="btn tts-btn" data-action="recite-tts" data-text="'+esc(lv.text)+'">🔊 听一听</button>'+
     '<button class="btn '+(done?'green':'gold')+'" data-action="recite-done" data-id="'+id+'">'+(done?'✓ 已会背':'我会背了 ✓')+'</button>'+
@@ -1974,14 +2007,14 @@ function askParent(){
   if(pin===S.settings.parentPin){UI.mode='parent';render();}
   else toast('密码错误');
 }
-function closeSidebar(){$('#sidebar').classList.remove('open');$('#scrim').classList.remove('show');}
+function closeSidebar(){$('#sidebar').classList.remove('open');$('#scrim').classList.remove('show');document.body.classList.remove('sidebar-open');}
 function bindGlobal(){
   $('#modebtn').addEventListener('click',()=>{
     if(UI.mode==='kid'){askParent();}
     else{UI.mode='kid';UI.view=UI.view==='parent'?'home':UI.view;closeSidebar();render();}
   });
-  $('#hamb').addEventListener('click',()=>{$('#sidebar').classList.toggle('open');$('#scrim').classList.toggle('show');});
-  $('#scrim').addEventListener('click',()=>{$('#sidebar').classList.remove('open');$('#scrim').classList.remove('show');});
+  $('#hamb').addEventListener('click',()=>{const o=$('#sidebar').classList.toggle('open');$('#scrim').classList.toggle('show',o);document.body.classList.toggle('sidebar-open',o);});
+  $('#scrim').addEventListener('click',()=>{closeSidebar();});
   $('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
   // close overlay via its own close buttons handled in bindApp
 }
