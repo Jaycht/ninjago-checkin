@@ -65,8 +65,6 @@ jobs:
               perms=''
               if 'android.permission.INTERNET' not in t:
                   perms+='    <uses-permission android:name="android.permission.INTERNET" />\n'
-              if 'android.permission.CAMERA' not in t:
-                  perms+='    <uses-permission android:name="android.permission.CAMERA" />\n'
               if perms:
                   t=t.replace('</manifest>', perms+'</manifest>')
               t2 = re.sub(r'(<activity\b[^>]*?)(\sandroid:screenOrientation="[^"]*")', r'\1 android:screenOrientation="sensor"', t, count=1, flags=re.S)
@@ -87,8 +85,11 @@ jobs:
               print('strings.xml not found, skip')
           PY
 
-      - name: Build Android APK (debug, no signing needed)
-        run: npx tauri android build --apk --debug
+      - name: Setup Android release signing (debug keystore for sideload)
+        run: python3 ci_sign.py
+
+      - name: Build Android APK (release, stripped & smaller)
+        run: npx tauri android build --apk
 
       - name: Upload APK artifact
         if: always()
