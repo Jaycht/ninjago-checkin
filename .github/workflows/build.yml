@@ -80,9 +80,9 @@ jobs:
           strings = pathlib.Path('src-tauri/gen/android/app/src/main/res/values/strings.xml')
           if strings.exists():
               s = strings.read_text(encoding='utf-8')
-              s2 = re.sub(r'(<string name="app_name"[^>]*>)[^<]*(</string>)', r'\1幻影忍者学习\2', s, count=1)
+              s2 = re.sub(r'(<string name="app_name"[^>]*>)[^<]*(</string>)', r'\1九漫成长营\2', s, count=1)
               strings.write_text(s2, encoding='utf-8')
-              print('app label set to 幻影忍者学习')
+              print('app label set to 九漫成长营')
           else:
               print('strings.xml not found, skip')
           PY
