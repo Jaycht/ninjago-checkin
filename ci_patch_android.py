@@ -7,6 +7,7 @@ import re
 import subprocess
 import sys
 import pathlib
+import shutil
 
 
 def patch_manifest():
@@ -81,76 +82,36 @@ def patch_status_bar_color():
         print(f'{themes_path.name}: statusBarColor & windowBackground set to #1a0f3e')
 
 
-def ensure_pillow():
-    try:
-        from PIL import Image
-        return Image
-    except ImportError:
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--quiet', 'pillow'])
-        from PIL import Image
-        return Image
-
-
 def patch_icons():
-    """用 src-tauri/icons/icon.png（1024 方形 game.png）显式覆盖 Android 各密度 mipmap，
-    并改写自适应图标：前景=game.png(透明底)、背景=海军蓝实色，确保安装/启动图标显示自定义图。"""
-    Image = ensure_pillow()
-    icon_src = pathlib.Path('src-tauri/icons/icon.png')
-    if not icon_src.exists():
-        print('src-tauri/icons/icon.png not found, skip explicit icon override')
+    """把已提交到仓库的预生成 mipmap（src-tauri/icons/mipmaps/）纯拷贝进 Android 工程。
+    全程只用标准库，不依赖 Pillow，从根本上避免 CI 因缺少第三方库而构建失败。"""
+    src_root = pathlib.Path('src-tauri/icons/mipmaps')
+    if not src_root.exists():
+        print('src-tauri/icons/mipmaps not found, skip icon override')
         return
-
-    im = Image.open(icon_src).convert('RGBA')
     res_dir = pathlib.Path('src-tauri/gen/android/app/src/main/res')
-    bg_color = (26, 15, 62, 255)  # #1a0f3e 海军蓝
-    sizes = {
-        'mipmap-mdpi': 48,
-        'mipmap-hdpi': 72,
-        'mipmap-xhdpi': 96,
-        'mipmap-xxhdpi': 144,
-        'mipmap-xxxhdpi': 192,
-    }
-
-    def make_fg(src_im, size):
-        canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
-        thumb = src_im.copy()
-        thumb.thumbnail((size, size), Image.LANCZOS)
-        x = (size - thumb.width) // 2
-        y = (size - thumb.height) // 2
-        canvas.paste(thumb, (x, y), thumb)
-        return canvas
-
-    def make_legacy(src_im, size, bg):
-        canvas = Image.new('RGBA', (size, size), bg)
-        thumb = src_im.copy()
-        thumb.thumbnail((int(size * 0.72), int(size * 0.72)), Image.LANCZOS)
-        x = (size - thumb.width) // 2
-        y = (size - thumb.height) // 2
-        canvas.paste(thumb, (x, y), thumb)
-        return canvas
-
-    for folder, size in sizes.items():
-        d = res_dir / folder
-        if not d.exists():
+    if not res_dir.exists():
+        print('gen/android res not found (tauri android init 未运行?), skip icon override')
+        return
+    folders = ['mipmap-mdpi', 'mipmap-hdpi', 'mipmap-xhdpi',
+               'mipmap-xxhdpi', 'mipmap-xxxhdpi']
+    copied = 0
+    for folder in folders:
+        s = src_root / folder
+        if not s.exists():
             continue
-        make_fg(im, size).save(d / 'ic_launcher_foreground.png', 'PNG')
-        make_legacy(im, size, bg_color).save(d / 'ic_launcher.png', 'PNG')
-        make_legacy(im, size, bg_color).save(d / 'ic_launcher_round.png', 'PNG')
-        Image.new('RGBA', (size, size), bg_color).save(d / 'ic_launcher_background.png', 'PNG')
-        print(f'android icon {folder} -> {size}x{size} (fg+bg+legacy)')
-
+        d = res_dir / folder
+        d.mkdir(parents=True, exist_ok=True)
+        for f in s.iterdir():
+            if f.is_file():
+                shutil.copy(f, d / f.name)
+                copied += 1
+    # 删除安卓自适应图标目录，强制使用标准 mipmap（= 原始 game.png，不拼背景色）
     anydpi = res_dir / 'mipmap-anydpi-v26'
     if anydpi.exists():
-        xml = (
-            '<?xml version="1.0" encoding="utf-8"?>\n'
-            '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
-            '    <background android:drawable="@mipmap/ic_launcher_background"/>\n'
-            '    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>\n'
-            '</adaptive-icon>\n'
-        )
-        for nm in ('ic_launcher.xml', 'ic_launcher_round.xml'):
-            (anydpi / nm).write_text(xml, encoding='utf-8')
-        print('adaptive icon xml updated (foreground + navy background)')
+        shutil.rmtree(anydpi)
+        print('removed adaptive mipmap-anydpi-v26 (use standard game.png icon)')
+    print(f'android icons copied: {copied} files from committed mipmaps (original game.png)')
 
 
 def main():
