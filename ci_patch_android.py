@@ -92,7 +92,8 @@ def ensure_pillow():
 
 
 def patch_icons():
-    """用 src-tauri/icons/icon.png 显式覆盖 Android 各密度 mipmap。"""
+    """用 src-tauri/icons/icon.png（1024 方形 game.png）显式覆盖 Android 各密度 mipmap，
+    并改写自适应图标：前景=game.png(透明底)、背景=海军蓝实色，确保安装/启动图标显示自定义图。"""
     Image = ensure_pillow()
     icon_src = pathlib.Path('src-tauri/icons/icon.png')
     if not icon_src.exists():
@@ -101,6 +102,7 @@ def patch_icons():
 
     im = Image.open(icon_src).convert('RGBA')
     res_dir = pathlib.Path('src-tauri/gen/android/app/src/main/res')
+    bg_color = (26, 15, 62, 255)  # #1a0f3e 海军蓝
     sizes = {
         'mipmap-mdpi': 48,
         'mipmap-hdpi': 72,
@@ -109,10 +111,19 @@ def patch_icons():
         'mipmap-xxxhdpi': 192,
     }
 
-    def make_icon(src_im, size):
+    def make_fg(src_im, size):
         canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
         thumb = src_im.copy()
         thumb.thumbnail((size, size), Image.LANCZOS)
+        x = (size - thumb.width) // 2
+        y = (size - thumb.height) // 2
+        canvas.paste(thumb, (x, y), thumb)
+        return canvas
+
+    def make_legacy(src_im, size, bg):
+        canvas = Image.new('RGBA', (size, size), bg)
+        thumb = src_im.copy()
+        thumb.thumbnail((int(size * 0.72), int(size * 0.72)), Image.LANCZOS)
         x = (size - thumb.width) // 2
         y = (size - thumb.height) // 2
         canvas.paste(thumb, (x, y), thumb)
@@ -122,24 +133,24 @@ def patch_icons():
         d = res_dir / folder
         if not d.exists():
             continue
-        icon = make_icon(im, size)
-        icon.save(d / 'ic_launcher.png', 'PNG')
-        icon.save(d / 'ic_launcher_round.png', 'PNG')
-        icon.save(d / 'ic_launcher_foreground.png', 'PNG')
-        print(f'android icon {folder} -> {size}x{size}')
+        make_fg(im, size).save(d / 'ic_launcher_foreground.png', 'PNG')
+        make_legacy(im, size, bg_color).save(d / 'ic_launcher.png', 'PNG')
+        make_legacy(im, size, bg_color).save(d / 'ic_launcher_round.png', 'PNG')
+        Image.new('RGBA', (size, size), bg_color).save(d / 'ic_launcher_background.png', 'PNG')
+        print(f'android icon {folder} -> {size}x{size} (fg+bg+legacy)')
 
     anydpi = res_dir / 'mipmap-anydpi-v26'
     if anydpi.exists():
         xml = (
             '<?xml version="1.0" encoding="utf-8"?>\n'
             '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
-            '    <background android:drawable="@android:color/transparent"/>\n'
+            '    <background android:drawable="@mipmap/ic_launcher_background"/>\n'
             '    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>\n'
             '</adaptive-icon>\n'
         )
         for nm in ('ic_launcher.xml', 'ic_launcher_round.xml'):
             (anydpi / nm).write_text(xml, encoding='utf-8')
-        print('adaptive icon xml updated')
+        print('adaptive icon xml updated (foreground + navy background)')
 
 
 def main():

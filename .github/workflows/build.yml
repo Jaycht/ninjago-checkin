@@ -51,7 +51,6 @@ jobs:
         run: npx tauri android init
 
       - name: Patch Android (orientation + INTERNET + label + statusBar + icons)
-        continue-on-error: true
         run: python3 ci_patch_android.py
 
       - name: Setup Android release signing (debug keystore for sideload)
@@ -65,7 +64,7 @@ jobs:
         run: |
           src_apk=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk' | head -n 1)
           if [ -z "$src_apk" ]; then echo "APK not found"; exit 1; fi
-          dst_name="九漫成长营-${{ github.ref_name }}.apk"
+          dst_name="JiumanChengZhangYing-${{ github.ref_name }}.apk"
           cp "$src_apk" "$dst_name"
           echo "Renamed APK to $dst_name"
 
@@ -74,13 +73,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ninjago-android-${{ github.run_number }}
-          path: 九漫成长营-*.apk
+          path: JiumanChengZhangYing-*.apk
           if-no-files-found: warn
 
       - name: Publish to GitHub Release (tag builds only)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: 九漫成长营-*.apk
+          files: JiumanChengZhangYing-*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
