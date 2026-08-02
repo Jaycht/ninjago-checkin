@@ -53,7 +53,7 @@ def patch_gradle():
 
 
 def patch_status_bar_color():
-    """将系统状态栏背景色设为 #1a0f3e，避免状态栏区域留空。"""
+    """将系统状态栏/窗口背景色设为 #1a0f3e，避免标题栏上方留白。"""
     for themes_path in [
         pathlib.Path('src-tauri/gen/android/app/src/main/res/values/themes.xml'),
         pathlib.Path('src-tauri/gen/android/app/src/main/res/values-night/themes.xml'),
@@ -61,6 +61,7 @@ def patch_status_bar_color():
         if not themes_path.exists():
             continue
         tt = themes_path.read_text(encoding='utf-8')
+        # statusBarColor
         if 'android:statusBarColor' in tt:
             tt = re.sub(r'(<item\s+name="android:statusBarColor">)[^<]+(</item>)',
                         r'\1#1a0f3e\2', tt, count=1)
@@ -68,8 +69,16 @@ def patch_status_bar_color():
             tt = re.sub(r'(</style>)',
                         r'        <item name="android:statusBarColor">#1a0f3e</item>\n    \1',
                         tt, count=1)
+        # windowBackground (兜底，防止标题栏上方出现系统窗口背景色/白条)
+        if 'android:windowBackground' in tt:
+            tt = re.sub(r'(<item\s+name="android:windowBackground">)[^<]+(</item>)',
+                        r'\1#1a0f3e\2', tt, count=1)
+        else:
+            tt = re.sub(r'(</style>)',
+                        r'        <item name="android:windowBackground">#1a0f3e</item>\n    \1',
+                        tt, count=1)
         themes_path.write_text(tt, encoding='utf-8')
-        print(f'{themes_path.name}: statusBarColor set to #1a0f3e')
+        print(f'{themes_path.name}: statusBarColor & windowBackground set to #1a0f3e')
 
 
 def ensure_pillow():
